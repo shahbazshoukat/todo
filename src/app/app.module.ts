@@ -1,0 +1,40 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { CreateTaskComponent } from './components/create-task/create-task.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { TaskCardComponent } from './components/task-card/task-card.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
+import { AuthInterceptor } from './components/auth-interceptor';
+import { AddLabelComponent } from './components/add-label/add-label.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    SidebarComponent,
+    CreateTaskComponent,
+    TaskCardComponent,
+    SignupComponent,
+    LoginComponent,
+    HomeComponent,
+
+    AddLabelComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
+  ],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

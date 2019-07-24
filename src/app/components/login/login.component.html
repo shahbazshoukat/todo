@@ -1,0 +1,71 @@
+<h1 class="error">ToDos | <span style="font-size: 35px">Easiest Way To Get Stuff Done</span></h1>
+<!---728x90--->
+<div class="w3layouts-two-grids">
+  <!---728x90--->
+  <div class="mid-class">
+    <div class="img-right-side">
+      <h3>Keep your life in sync</h3>
+      <p>
+        ToDos is the easiest way to get stuff done. Whether you’re planning
+        a holiday, sharing a shopping list with a partner or managing multiple
+        work projects, ToDos is here to help you tick off all your personal
+        and professional to-dos.
+      </p>
+      <img src="./../../../assets/images/b11.png" class="img-fluid" alt="" />
+    </div>
+    <div class="txt-left-side" >
+      <h2>Login Here</h2>
+      <form (submit) = "onLogin(loginForm)"  #loginForm = "ngForm" >
+
+
+        <div class="form-left-to-w3l">
+          <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+          <input type="email" name="email" ngModel placeholder="Email" required />
+
+          <div class="clear"></div>
+        </div>
+        <div class="form-left-to-w3l ">
+          <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            ngModel
+          />
+          <div class="clear"></div>
+        </div>
+        <div class="main-two-w3ls">
+          <div class="left-side-forget">
+              <input type="checkbox" class="checked">
+              <span class="remenber-me">Remember me </span>
+          </div>
+          <div class="right-side-forget">
+              <a href="#" class="for">Forgot password?</a>
+          </div>
+      </div>
+
+        <div class="btnn" style="margin-top: 70px">
+          <button style="height:50px" type="submit">Login</button>
+        </div>
+      </form>
+      <div class="w3layouts_more-buttn" style="margin-top:70px">
+        <h3>
+          Already have an account?
+          <a [routerLink]="['/signup']" routerLinkActive="router-link-active" >Sign Up Here </a>
+        </h3>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+
+
+
+  </div>
+</div>
+<!---728x90--->
+<footer class="copyrigh-wthree">
+  <p>
+    © 2019 ToDos. All Rights Reserved
+  </p>
+</footer>
