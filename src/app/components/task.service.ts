@@ -27,7 +27,8 @@ export class TasksService {
     notes: string,
     list: string,
     label: string[],
-    reminder: string
+    reminder: string,
+    groupId: string
   ) {
     const task: Task = {
       id: null,
@@ -35,7 +36,8 @@ export class TasksService {
       notes: notes,
       list: list,
       label: label,
-      reminder: reminder
+      reminder: reminder,
+      groupId : groupId
     };
 
     this.http
@@ -67,7 +69,8 @@ export class TasksService {
               list: task.list,
               label: task.labels,
               reminder: task.reminder,
-              userId: task.userId
+              userId: task.userId,
+              groupId: task.groupId
             };
           });
         })
@@ -108,7 +111,8 @@ export class TasksService {
     notes: string,
     list: string,
     label: string[],
-    reminder: string
+    reminder: string,
+    groupId: string
   ) {
     const task: Task = {
       id: id,
@@ -116,7 +120,8 @@ export class TasksService {
       notes: notes,
       list: list,
       label: label,
-      reminder: reminder
+      reminder: reminder,
+      groupId: groupId
     };
 
     this.http
@@ -147,7 +152,8 @@ export class TasksService {
               list: task.list,
               label: task.labels,
               reminder: task.reminder,
-              userId: task.userId
+              userId: task.userId,
+              groupId: task.groupId
             };
           });
         })
@@ -195,7 +201,8 @@ export class TasksService {
               list: task.list,
               label: task.labels,
               reminder: task.reminder,
-              userId: task.userId
+              userId: task.userId,
+              groupId: task.groupId
             };
           });
         })

@@ -80,7 +80,8 @@ export class CreateTaskComponent implements OnInit {
         form.value.notes,
         form.value.list,
         this.enteredLabels,
-        form.value.reminder
+        form.value.reminder,
+        null
       );
     }else{
       this.tasksService.updateTask(
@@ -89,7 +90,8 @@ export class CreateTaskComponent implements OnInit {
         form.value.notes,
         form.value.list,
         this.enteredLabels,
-        form.value.reminder
+        form.value.reminder,
+        null
       );
     }
     form.resetForm();

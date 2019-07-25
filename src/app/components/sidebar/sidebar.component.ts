@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { List } from "../list.model";
 import { CList } from "../clist.model";
 import { Label } from "../label.model";
+import { Group } from  "../group.model";
 import { ListsService } from "../list.service";
 import { LabelsService } from "../label.service";
 import { UsersService } from "../user.service";
@@ -9,6 +10,7 @@ import { Subscription } from "rxjs";
 import { Router, Route, ParamMap, ActivatedRoute } from "@angular/router";
 import { TasksService } from "../task.service";
 import { NgForm } from "@angular/forms";
+import { GroupsService } from '../group.service';
 
 @Component({
   selector: "app-sidebar",
@@ -22,6 +24,8 @@ export class SidebarComponent implements OnInit {
 
   labels: Label[] = [];
   private labelsSub: Subscription;
+  groups: Group[] = [];
+  private groupsSub: Subscription;
 
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
@@ -29,11 +33,13 @@ export class SidebarComponent implements OnInit {
   addListFlag: boolean = false;
   editListFlag: boolean = false;
   editLabelFlag: boolean = false;
+  editGroupFlag: boolean = false;
   constructor(
     public listsService: ListsService,
     public labelsService: LabelsService,
     private authService: UsersService,
     private tasksService: TasksService,
+    private groupsService : GroupsService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -54,6 +60,13 @@ export class SidebarComponent implements OnInit {
         this.labels = labels;
       });
 
+      this.groupsService.getGroups();
+    this.groupsSub = this.groupsService
+      .getGroupsUpdateListener()
+      .subscribe((groups: Group[]) => {
+        this.groups = groups;
+      });
+
     this.userIsAuthenticated = this.authService.getIsAuth();
 
     this.authListenerSubs = this.authService
@@ -61,8 +74,7 @@ export class SidebarComponent implements OnInit {
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
       });
-      var tasks = this.tasksService.getTasksCountList("meetings");
-      console.log(tasks);
+
 
 
   }
@@ -93,6 +105,9 @@ export class SidebarComponent implements OnInit {
   onEditLabelClick() {
     this.editLabelFlag = !this.editLabelFlag;
   }
+  onEditGroupClick() {
+    this.editGroupFlag = !this.editGroupFlag;
+  }
 
   onAddList(form: NgForm) {
     if (form.invalid) {
@@ -110,7 +125,9 @@ export class SidebarComponent implements OnInit {
   deleteLabel(listId: string) {
     this.labelsService.deleteLabel(listId);
   }
-
+  deleteGroup(groupId: string) {
+    this.groupsService.deleteGroup(groupId);
+  }
   addList() {
     this.listsService.setListBtnClick(true);
   }

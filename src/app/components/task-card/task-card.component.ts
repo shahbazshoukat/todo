@@ -12,12 +12,7 @@ import { List } from "../list.model";
   styleUrls: ["./task-card.component.css"]
 })
 export class TaskCardComponent implements OnInit, OnDestroy {
-  // posts=[
-  //   {title:"first", content:"This is first post"},
-  //   {title:"second", content:"This is second post"},
-  //   {title:"third", content:"This is third post"}
 
-  // ]
   tasks: Task[] = [];
   tasks2: Task[] = [];
   private tasksSub: Subscription;
@@ -55,12 +50,10 @@ export class TaskCardComponent implements OnInit, OnDestroy {
           .getTaskUpdateListener()
           .subscribe((tasks: Task[]) => {
             this.tasks = tasks;
-            console.log(this.tasksService.searchTasks("wefef"));
+
           });
       }
     });
-
-    console.log(this.tasksService.searchTasks("new"));
   }
 
   onDelete(taskId: string) {

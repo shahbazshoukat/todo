@@ -9,6 +9,9 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { AuthGuard } from './components/auth.guard';
 import { AppComponent } from './app.component';
+import { AddGroupComponent } from './components/add-group/add-group.component';
+import { GroupComponent } from './components/group/group.component';
+import { GroupMembersComponent } from './components/group-members/group-members.component';
 
 
 const routes: Routes = [
@@ -19,10 +22,10 @@ const routes: Routes = [
   {path: "signup", component: SignupComponent},
   {path: "",component:HomeComponent, canActivate:[AuthGuard]},
   {path: "tasks/lists/:list", component:TaskCardComponent, canActivate: [AuthGuard]},
-  {path: "tasks/labels/:label", component:TaskCardComponent, canActivate: [AuthGuard]}
-
-
-
+  {path: "tasks/labels/:label", component:TaskCardComponent, canActivate: [AuthGuard]},
+  {path :"addgroup", component: AddGroupComponent, canActivate: [AuthGuard]},
+  {path: "groups/:group", component: GroupComponent, canActivate: [AuthGuard]},
+  {path: "groupmembers/:groupId", component: GroupMembersComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

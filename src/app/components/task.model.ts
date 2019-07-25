@@ -7,5 +7,5 @@ export interface Task{
   list: string,
   label:string[],
   reminder: string,
-
+  groupId: string
 }

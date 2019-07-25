@@ -1,0 +1,30 @@
+<div class="bs-example widget-shadow task-card-container col-md-9" data-example-id="contextual-table">
+  <h4 style="display: inline">Group</h4>
+  <span class="pull-right"><button class="btn btn-info">Invite</button></span>
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr>
+        <th></th>
+
+      </tr>
+    </thead>
+    <tbody multi="true"  >
+      <tr class="active"  >
+        <td class="task-row" >
+          <span class="user-icon-span label-default" ><i style="color:white" class="glyphicon glyphicon-user"></i></span>
+          <span style="margin-left: 10px;">user name here</span>
+
+          <span  class="label pull-right" (click)="editTask(task.id)" style="color:#bbb"
+            ><i class="glyphicon glyphicon-remove-circle"></i
+          ></span>
+        </td>
+
+      </tr>
+
+
+    </tbody>
+    <p *ngIf = "tasks.length <= 0">
+      No Member
+    </p>
+  </table>
+</div>

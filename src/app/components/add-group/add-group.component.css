@@ -1,0 +1,68 @@
+.task-card-container {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 20px;
+  margin-top: 100px;
+  margin-left: 18%;
+}
+
+.task-row {
+  border-width: 1px;
+  border-radius: 0px;
+  background-color: red;
+  margin-top: 50px;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
+}
+.task-input {
+  border-width: 0px;
+  border-bottom-width: 2px;
+  width: 80%;
+  border-radius: 0px;
+  box-shadow: none;
+}
+.form-control{
+  border-radius: 0;
+}
+.badgebox
+{
+    opacity: 0;
+}
+
+.badgebox + .badge
+{
+    /* Move the check mark away when unchecked */
+    text-indent: -999999px;
+    /* Makes the badge's width stay the same checked and unchecked */
+	width: 27px;
+}
+
+.badgebox:focus + .badge
+{
+    /* Set something to make the badge looks focused */
+    /* This really depends on the application, in my case it was: */
+
+    /* Adding a light border */
+    box-shadow: inset 0px 0px 5px;
+    /* Taking the difference out of the padding */
+}
+
+.badgebox:checked + .badge
+{
+    /* Move the check mark back when checked */
+	text-indent: 0;
+}
+
+.list-input{
+  border-width: 0px;
+  border-bottom: 1px solid #bbb ;
+  height:35px;
+  background: transparent;
+  width:35%;
+
+}
+.list-input:focus{
+  outline:none;
+}

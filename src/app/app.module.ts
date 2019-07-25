@@ -14,6 +14,9 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { AuthInterceptor } from './components/auth-interceptor';
 import { AddLabelComponent } from './components/add-label/add-label.component';
+import { AddGroupComponent } from './components/add-group/add-group.component';
+import { GroupComponent } from './components/group/group.component';
+import { GroupMembersComponent } from './components/group-members/group-members.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,13 @@ import { AddLabelComponent } from './components/add-label/add-label.component';
     LoginComponent,
     HomeComponent,
 
-    AddLabelComponent
+    AddLabelComponent,
+
+    AddGroupComponent,
+
+    GroupComponent,
+
+    GroupMembersComponent
   ],
   imports: [
     BrowserModule,

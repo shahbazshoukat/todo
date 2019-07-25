@@ -1,0 +1,50 @@
+<div class="bs-example widget-shadow task-card-container col-md-9" data-example-id="contextual-table">
+  <h4 style="display: inline">Group</h4>
+  <span class="pull-right"><a [routerLink]="['/groupmembers', groupId]" routerLinkActive="router-link-active"  class="btn btn-info">Members</a></span>
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr>
+        <th></th>
+
+      </tr>
+    </thead>
+    <tbody multi="true" *ngIf="tasks.length > 0" >
+      <tr class="active" *ngFor="let task of tasks" >
+        <td class="task-row" >
+          <label class="checkbox-inline"
+            ><input ngModel (change)="onDelete(task.id)" type="checkbox" value="" />{{task.title}}</label>
+          <span class="label label-info" style="margin-left: 5px;">{{task.list}}</span>
+          <span  class="label pull-right" (click)="editTask(task.id)" style="color:#bbb"
+            ><i class="glyphicon glyphicon-edit"></i
+          ></span>
+        </td>
+
+      </tr>
+
+
+    </tbody>
+    <div class="row" >
+      <form (submit) = "addTask(groupTaskForm)"  #groupTaskForm = "ngForm" >
+      <div class="col-md-10" >
+        <input
+        style="display: inline"
+        type="text"
+        class="form-control task-input"
+        aria-label="Small"
+        aria-describedby="inputGroup-sizing-sm"
+        name="title"
+        [ngModel]=""
+        placeholder="Add a task"
+      />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-warning pull-right btn-block" style="display: inline" type="submit" >Add</button>
+      </div>
+
+    </form>
+    </div>
+    <p *ngIf="tasks.length <= 0">
+      No Task Added yet!
+    </p>
+  </table>
+</div>

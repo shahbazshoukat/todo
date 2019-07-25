@@ -9,8 +9,8 @@ const postSchema = mongoose.Schema({
   ],
   reminder:{ type: String, require: false},
   userId:{type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
-  completeStatus:{type: Boolean, require: false}
-
+  completeStatus:{type: Boolean, require: false},
+  groupId:{type:mongoose.Schema.Types.ObjectId, ref: "Group", required: false}
 });
 
 module.exports = mongoose.model('Task', postSchema);

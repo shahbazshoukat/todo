@@ -7,6 +7,7 @@ const Task = require("./models/task");
 const List = require("./models/list");
 const User = require("./models/user");
 const Label = require("./models/label");
+const Group = require("./models/group");
 const checkAuth = require("./middleware/check-auth");
 const app = express();
 
@@ -112,6 +113,7 @@ app.post("/api/tasks", checkAuth, (req, res, next) => {
     labels: req.body.label,
     reminder: req.body.reminder,
     userId: req.userData.userId,
+    groupId: req.body.groupId,
     completeStatus: false
   });
   task.save().then(createdTask => {
@@ -125,7 +127,7 @@ app.post("/api/tasks", checkAuth, (req, res, next) => {
 
 
 app.get("/api/tasks", checkAuth, (req, res, next) => {
-  Task.find({userId : req.userData.userId}).then(documents => {
+  Task.find({userId : req.userData.userId, groupId : null}).then(documents => {
     res.status(200).json({
       message: "Tasks fetched successfully!",
       tasks: documents
@@ -134,7 +136,7 @@ app.get("/api/tasks", checkAuth, (req, res, next) => {
 });
 
 app.get("/api/tasksbylist:list", checkAuth, (req, res, next) => {
-  Task.find({list:req.params.list, userId : req.userData.userId}).then(documents => {
+  Task.find({list:req.params.list, userId : req.userData.userId, groupId: null}).then(documents => {
     res.status(200).json({
       message: "Tasks fetched successfully!",
       tasks: documents
@@ -143,7 +145,7 @@ app.get("/api/tasksbylist:list", checkAuth, (req, res, next) => {
 });
 
 app.get("/api/taskscountbylist:list", checkAuth, (req, res, next) => {
-  Task.find({list:req.params.list, userId : req.userData.userId}).count().then(noOfTasks => {
+  Task.find({list:req.params.list, userId : req.userData.userId, groupId: null}).count().then(noOfTasks => {
     res.status(200).json({
       message: "Tasks fetched successfully!",
       noOfTasks: noOfTasks
@@ -152,7 +154,7 @@ app.get("/api/taskscountbylist:list", checkAuth, (req, res, next) => {
 });
 
 app.get("/api/taskscountbylabel:label", checkAuth, (req, res, next) => {
-  Task.find({label:req.params.label, userId : req.userData.userId}).count().then(noOfTasks => {
+  Task.find({label:req.params.label, userId : req.userData.userId, groupId: null}).count().then(noOfTasks => {
     res.status(200).json({
       message: "Tasks fetched successfully!",
       noOfTasks: noOfTasks
@@ -162,7 +164,16 @@ app.get("/api/taskscountbylabel:label", checkAuth, (req, res, next) => {
 
 
 app.get("/api/tasksbylabel:label", checkAuth, (req, res, next) => {
-  Task.find({userId : req.userData.userId, labels: req.params.label}).then(documents => {
+  Task.find({userId : req.userData.userId, labels: req.params.label, groupId: null}).then(documents => {
+    res.status(200).json({
+      message: "Tasks fetched successfully!",
+      tasks: documents
+    });
+  });
+});
+
+app.get("/api/tasksbygroup:group", checkAuth, (req, res, next) => {
+  Task.find({groupId:req.params.group}).then(documents => {
     res.status(200).json({
       message: "Tasks fetched successfully!",
       tasks: documents
@@ -171,7 +182,7 @@ app.get("/api/tasksbylabel:label", checkAuth, (req, res, next) => {
 });
 
 app.get("/api/tasks:id", checkAuth, (req, res, next) => {
-  Task.findOne({userId : req.userData.userId, _id: req.params.id}).then(documents => {
+  Task.findOne({userId : req.userData.userId, _id: req.params.id, groupId: null}).then(documents => {
     res.status(200).json({
       message: "Task fetched successfully!",
       task: documents
@@ -287,5 +298,50 @@ app.delete("/api/labels/:id",checkAuth, (req, res, next) => {
     res.status(200).json({ message: "Label deleted!" });
   });
 });
+
+
+/*****Group API */
+
+app.post("/api/groups",checkAuth, (req, res, next) => {
+  const group = new Group({
+    title: req.body.title,
+    userId: req.userData.userId
+  });
+  group.save().then(createdGroup => {
+    res.status(201).json({
+      message: "Group Added successfully",
+      groupId: createdGroup._id
+    });
+  });
+});
+app.get("/api/groups",checkAuth, (req, res, next) => {
+  Group.find({userId: req.userData.userId}).then(documents => {
+    res.status(200).json({
+      message: "Groups fetched successfully!",
+      groups: documents
+    });
+  });
+});
+
+app.get("/api/groups:id",checkAuth, (req, res, next) => {
+  Group.findOne({_id: req.params.id}).then(documents => {
+    res.status(200).json({
+      message: "Group fetched successfully!",
+      groups: documents
+    });
+  });
+});
+
+
+
+app.delete("/api/groups/:id", checkAuth, (req, res, next) => {
+
+  Group.deleteOne({ _id: req.params.id, userId: req.userData.userId }).then(result => {
+    console.log(result);
+    res.status(200).json({ message: "Group deleted!" });
+  });
+});
+
+
 
 module.exports = app;
