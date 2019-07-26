@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { Subject } from "rxjs";
+import { Subject, Observable } from "rxjs";
 
 import { User } from "./user.model";
 
@@ -101,6 +101,8 @@ export class UsersService {
     this.router.navigate(["/login"]);
   }
 
+
+
   private setAuthTimer(duration: number) {
     console.log("Setting timer: " + duration);
     this.tokenTimer = setTimeout(() => {
@@ -133,5 +135,9 @@ export class UsersService {
       username: username,
       expirationDate: new Date(expirationDate)
     }
+  }
+
+  getUserById(userId : string): Observable<any>{
+    return this.http.get<{name: string, email: any}>('http://localhost:3000/api/user' + userId);
   }
 }

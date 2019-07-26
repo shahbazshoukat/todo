@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Group } from '../group.model';
 import { GroupsService } from '../group.service';
+import { UsersService } from "../user.service";
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Member } from "../member.model";
 @Component({
@@ -11,8 +12,8 @@ import { Member } from "../member.model";
 export class GroupMembersComponent implements OnInit {
   private group : Group;
   private groupId: string;
-  private members : Member[];
-  constructor(private groupsService : GroupsService, private route : ActivatedRoute) { }
+   members : Member[];
+  constructor(private groupsService : GroupsService, private route : ActivatedRoute, private usersService : UsersService) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -21,7 +22,9 @@ export class GroupMembersComponent implements OnInit {
         this.groupsService.getGroupById(this.groupId).subscribe(group => {
           this.group = group.groups;
           this.group.members.forEach(member => {
-            //start from here
+            this.usersService.getUserById(member).subscribe(user => {
+              console.log(user);
+            })
           });
         })
       } else {

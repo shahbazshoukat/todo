@@ -9,10 +9,10 @@
       </tr>
     </thead>
     <tbody multi="true"  >
-      <tr class="active"  >
+      <tr class="active" *ngFor="let member of members" >
         <td class="task-row" >
           <span class="user-icon-span label-default" ><i style="color:white" class="glyphicon glyphicon-user"></i></span>
-          <span style="margin-left: 10px;">user name here</span>
+          <span style="margin-left: 10px;">{{member.name}}</span>
 
           <span  class="label pull-right" (click)="editTask(task.id)" style="color:#bbb"
             ><i class="glyphicon glyphicon-remove-circle"></i
@@ -23,7 +23,7 @@
 
 
     </tbody>
-    <p *ngIf = "tasks.length <= 0">
+    <p *ngIf = "members.length <= 0">
       No Member
     </p>
   </table>

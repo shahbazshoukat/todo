@@ -95,10 +95,11 @@ app.post("/api/login", (req, res, next) => {
     });
 });
 
-app.get("/api/user",checkAuth, (req, res, next) => {
-  User.findOne({_id: checkAuth.userData.userId }).then(user => {
+app.get("/api/user:id",checkAuth, (req, res, next) => {
+  User.findOne({_id: req.params.id }).then(user => {
     res.status(200).json({
-      name:user.name
+      name:user.name,
+      email: user.email
     })
   })
 })
