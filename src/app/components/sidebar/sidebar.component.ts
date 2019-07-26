@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { List } from "../list.model";
 import { CList } from "../clist.model";
 import { Label } from "../label.model";
-import { Group } from  "../group.model";
+import { Group } from "../group.model";
 import { ListsService } from "../list.service";
 import { LabelsService } from "../label.service";
 import { UsersService } from "../user.service";
@@ -10,7 +10,8 @@ import { Subscription } from "rxjs";
 import { Router, Route, ParamMap, ActivatedRoute } from "@angular/router";
 import { TasksService } from "../task.service";
 import { NgForm } from "@angular/forms";
-import { GroupsService } from '../group.service';
+import { GroupsService } from "../group.service";
+import { User } from "../user.model";
 
 @Component({
   selector: "app-sidebar",
@@ -26,7 +27,7 @@ export class SidebarComponent implements OnInit {
   private labelsSub: Subscription;
   groups: Group[] = [];
   private groupsSub: Subscription;
-
+  private user: User;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
 
@@ -39,13 +40,12 @@ export class SidebarComponent implements OnInit {
     public labelsService: LabelsService,
     private authService: UsersService,
     private tasksService: TasksService,
-    private groupsService : GroupsService,
+    private groupsService: GroupsService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-
     this.listsService.getLists();
     this.listsSub = this.listsService
       .getListUpdateListener()
@@ -60,7 +60,8 @@ export class SidebarComponent implements OnInit {
         this.labels = labels;
       });
 
-      this.groupsService.getGroups();
+    
+    this.groupsService.getGroups();
     this.groupsSub = this.groupsService
       .getGroupsUpdateListener()
       .subscribe((groups: Group[]) => {
@@ -68,26 +69,25 @@ export class SidebarComponent implements OnInit {
       });
 
     this.userIsAuthenticated = this.authService.getIsAuth();
-
+    this.user = this.authService.getUser();
+    console.log(this.user);
     this.authListenerSubs = this.authService
       .getAuthStatusListener()
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
+        
       });
-
-
-
   }
 
   getTasksByList(list: string) {
     this.tasksService.getTasksByList(list);
   }
 
-  getTasksCountByList(list: string){
+  getTasksCountByList(list: string) {
     return this.tasksService.getTasksCountByList(list);
   }
 
-  getTasksCountByLabel(label: string){
+  getTasksCountByLabel(label: string) {
     return this.tasksService.getTasksCountByLabel(label);
   }
 

@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { ListsService } from "../list.service";
 import { List } from "../list.model";
+import { UsersService } from '../user.service';
 
 @Component({
   selector: "app-task-card",
@@ -21,7 +22,8 @@ export class TaskCardComponent implements OnInit, OnDestroy {
     private tasksService: TasksService,
     public router: Router,
     private listsService: ListsService,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    private usersService: UsersService
   ) {}
 
   ngOnInit() {
@@ -29,21 +31,23 @@ export class TaskCardComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("list")) {
         this.taskCardTitle = "Lists";
-        this.tasksService.getTasksByList(paramMap.get("list"));
+        this.tasks = this.tasksService.getTasksByList(paramMap.get("list"));
+        console.log(this.tasks);
         this.tasksSub = this.tasksService
           .getTaskUpdateListener()
           .subscribe((tasks: Task[]) => {
-            this.tasks = tasks;
+            //this.tasks = tasks;
           });
       } else if (paramMap.has("label")) {
         this.taskCardTitle = "Labels";
-        this.tasksService.getTasksByLabel(paramMap.get("label"));
+        this.tasks = this.tasksService.getTasksByLabel(paramMap.get("label"));
         this.tasksSub = this.tasksService
           .getTaskUpdateListener()
           .subscribe((tasks: Task[]) => {
-            this.tasks = tasks;
+            //this.tasks = tasks;
           });
       } else {
+        
         this.taskCardTitle = "All Tasks";
         this.tasksService.getTasks();
         this.tasksSub = this.tasksService

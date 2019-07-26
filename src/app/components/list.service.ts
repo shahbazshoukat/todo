@@ -24,12 +24,12 @@ export class ListsService{
 
 
   addList(title: string){
-    const list: List = {id: null, title: title};
+    const list: List = {_id: null, title: title};
     this.http.post<{message: string, listId: string}>('http://localhost:3000/api/lists', list)
     .subscribe(responseData => {
       console.log(responseData);
       const id = responseData.listId;
-      list.id = id;
+      list._id = id;
       console.log(list);
       this.lists.push(list);
       this.listsUpdated.next([...this.lists]);
@@ -42,7 +42,7 @@ export class ListsService{
       map(listData =>{
         return listData.lists.map(list =>{
           return {
-            id: list._id,
+            _id: list._id,
             title: list.title,
           }
         })
@@ -65,9 +65,10 @@ export class ListsService{
 
   }
 
-  getListById(listId : string): Observable<any>{
-    return this.http.get<{message: string, lists: any}>('http://localhost:3000/api/lists' + listId);
+  getListById(listId: string) {
+    return { ...this.lists.find(l => l._id == listId) };
   }
+
 }
 
 

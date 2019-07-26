@@ -1,0 +1,33 @@
+<div
+  class="bs-example widget-shadow task-card-container col-md-9"
+  data-example-id="contextual-table"
+>
+  <h4 style="display: inline">Group</h4>
+
+  <table class="table table-borderless table-hover">
+    <thead>
+      <tr>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody multi="true">
+      <tr class="active" *ngFor="let user of users">
+        <td class="task-row">
+          <span class="user-icon-span label-default"
+            ><i style="color:white" class="glyphicon glyphicon-user"></i
+          ></span>
+          <span style="margin-left: 10px;">{{ user.name }}</span>
+
+          <button class="pull-right" style="background-color: transparent; border-width: 0px;"
+            ><i
+              class="glyphicon glyphicon-plus"
+            ></i
+          ></button>
+        </td>
+      </tr>
+    </tbody>
+    <p *ngIf="users.length <= 0">
+      No Members
+    </p>
+  </table>
+</div>

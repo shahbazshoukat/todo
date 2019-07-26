@@ -1,4 +1,4 @@
 export interface Label{
-  id:string,
+  _id:string,
   title: string,
 }

@@ -12,8 +12,9 @@
       <tr class="active" *ngFor="let task of tasks" >
         <td class="task-row" >
           <label class="checkbox-inline"
-            ><input ngModel (change)="onDelete(task.id)" type="checkbox" value="" />{{task.title}}</label>
-          <span class="label label-info" style="margin-left: 5px;">{{task.list}}</span>
+            ><input ngModel (change)="onDelete(task._id)" type="checkbox" value="" />{{task.title}}</label>
+
+          <span class="label label-info" style="margin-left: 5px;">{{task.userId}}</span>
           <span  class="label pull-right" (click)="editTask(task.id)" style="color:#bbb"
             ><i class="glyphicon glyphicon-edit"></i
           ></span>

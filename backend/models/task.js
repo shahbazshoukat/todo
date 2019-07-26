@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const postSchema = mongoose.Schema({
   title:{ type: String, required: true},
   notes:{ type: String, require: false},
-  list:{ type: mongoose.Schema.Types.ObjectId, ref: "List", require: false},
+  list:{ type: String, require: false},
   labels:[
     { type: mongoose.Schema.Types.ObjectId, ref: "Label", required: false}
   ],

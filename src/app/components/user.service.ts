@@ -13,6 +13,7 @@ export class UsersService {
   private authStatusListener = new Subject<boolean>();
   private user : User;
   private username: string;
+  private users: any[] = [];
 
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -36,7 +37,7 @@ export class UsersService {
   }
 
   addUser(name:string, email: string, password: string) {
-    const authData: User = {id:null, name:name, email: email, password: password };
+    const authData: User = {_id:null, name:name, email: email, password: password };
     this.http
       .post("http://localhost:3000/api/signup", authData)
       .subscribe(response => {
@@ -45,7 +46,7 @@ export class UsersService {
   }
 
   loginUser(email: string, password: string) {
-    const authData: User = { id:null, name:null, email: email, password: password };
+    const authData = {email: email, password: password };
     this.http
       .post<{ token: string; expiresIn: number, userId: string, name: string, email:string }>(
         "http://localhost:3000/api/login",
@@ -55,7 +56,7 @@ export class UsersService {
         const token = response.token;
         this.token = token;
         this.user={
-            id: response.userId,
+            _id: response.userId,
             name: response.name,
             email: response.email,
             password:""
@@ -114,7 +115,6 @@ export class UsersService {
     localStorage.setItem("token", token);
     localStorage.setItem("expiration", expirationDate.toISOString());
     localStorage.setItem("username", username);
-
   }
 
   private clearAuthData() {
@@ -139,5 +139,24 @@ export class UsersService {
 
   getUserById(userId : string): Observable<any>{
     return this.http.get<{name: string, email: any}>('http://localhost:3000/api/user' + userId);
+  }
+
+  
+
+  getUsers(){
+    let usr;
+    
+    this.http.get<{message: string, users: any}>('http://localhost:3000/api/user')
+    .subscribe(responseData =>{
+      responseData.users.forEach(user => {
+        usr = {
+          _id : user._id,
+          name : user.name,
+          email : user.email
+        }
+        this.users.push(usr);
+      });
+    });
+    return this.users;
   }
 }

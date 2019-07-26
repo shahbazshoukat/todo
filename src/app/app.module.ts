@@ -17,6 +17,7 @@ import { AddLabelComponent } from './components/add-label/add-label.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
 import { GroupComponent } from './components/group/group.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
+import { AddMembersComponent } from './components/add-members/add-members.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,9 @@ import { GroupMembersComponent } from './components/group-members/group-members.
 
     GroupComponent,
 
-    GroupMembersComponent
+    GroupMembersComponent,
+
+    AddMembersComponent
   ],
   imports: [
     BrowserModule,

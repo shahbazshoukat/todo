@@ -31,13 +31,14 @@ export class TasksService {
     groupId: string
   ) {
     const task: Task = {
-      id: null,
+      _id: null,
       title: title,
       notes: notes,
       list: list,
       label: label,
       reminder: reminder,
-      groupId : groupId
+      groupId : groupId,
+      userId : null
     };
 
     this.http
@@ -47,7 +48,7 @@ export class TasksService {
       )
       .subscribe(responseData => {
         const id = responseData.taskId;
-        task.id = id;
+        task._id = id;
         console.log(responseData.message);
         this.tasks.push(task);
         this.tasksUpdated.next([...this.tasks]);
@@ -63,7 +64,7 @@ export class TasksService {
           tTasks = taskData.tasks;
           return taskData.tasks.map(task => {
             return {
-              id: task._id,
+              _id: task._id,
               title: task.title,
               notes: task.notes,
               list: task.list,
@@ -76,29 +77,18 @@ export class TasksService {
         })
       )
       .subscribe(transformedTasks => {
-        this.transformedTasks = transformedTasks;
         transformedTasks.forEach(task => {
-          this.listsService.getListById(task.list).subscribe(list => {
-            if (list.lists != null) {
-              task.list = list.lists.title;
-            } else {
-              task.list = "";
-            }
+          let list;
+          list = this.listsService.getListById(task.list);
+          task.list = list.title;
+        });
+        transformedTasks.forEach(task => {
+          let label;
+          task.label.forEach((lbl,i) => {
+            label = this.labelsService.getLabelById(lbl);
+            task.label[i] = label.title;
           });
         });
-
-        transformedTasks.forEach(task => {
-          task.label.forEach((label, i) => {
-            this.labelsService.getLabelById(label).subscribe(lbl => {
-              if (lbl.labels != null) {
-                task.label[i] = lbl.labels.title;
-              } else {
-                task.label[i] = "";
-              }
-            });
-          });
-        });
-
         this.tasks = transformedTasks;
         this.transformedTasks = tTasks;
         this.tasksUpdated.next([...this.tasks]);
@@ -115,13 +105,14 @@ export class TasksService {
     groupId: string
   ) {
     const task: Task = {
-      id: id,
+      _id: id,
       title: title,
       notes: notes,
       list: list,
       label: label,
       reminder: reminder,
-      groupId: groupId
+      groupId: groupId,
+      userId : null
     };
 
     this.http
@@ -129,7 +120,7 @@ export class TasksService {
       .subscribe(response => {
         console.log(response);
         const updatedTasks = [...this.tasks];
-        const oldPostIndex = updatedTasks.findIndex(p => p.id === task.id);
+        const oldPostIndex = updatedTasks.findIndex(p => p.id === task._id);
         updatedTasks[oldPostIndex] = task;
         this.tasks = updatedTasks;
         this.tasksUpdated.next([...this.tasks]);
@@ -137,104 +128,7 @@ export class TasksService {
       });
   }
 
-  getTasksByList(list: string) {
-    this.http
-      .get<{ message: string; tasks: any }>(
-        "http://localhost:3000/api/tasksbylist" + list
-      )
-      .pipe(
-        map(taskData => {
-          return taskData.tasks.map(task => {
-            return {
-              id: task._id,
-              title: task.title,
-              notes: task.notes,
-              list: task.list,
-              label: task.labels,
-              reminder: task.reminder,
-              userId: task.userId,
-              groupId: task.groupId
-            };
-          });
-        })
-      )
-      .subscribe(transformedTasks => {
-        transformedTasks.forEach(task => {
-          this.listsService.getListById(task.list).subscribe(list => {
-            if (list.lists != null) {
-              task.list = list.lists.title;
-            } else {
-              task.list = "";
-            }
-          });
-        });
-
-        transformedTasks.forEach(task => {
-          task.label.forEach((label, i) => {
-            this.labelsService.getLabelById(label).subscribe(lbl => {
-              if (lbl.labels != null) {
-                task.label[i] = lbl.labels.title;
-              } else {
-                task.label[i] = "";
-              }
-            });
-          });
-        });
-
-        this.tasks = transformedTasks;
-        this.tasksUpdated.next([...this.tasks]);
-      });
-  }
-
-  getTasksByLabel(label: string) {
-    this.http
-      .get<{ message: string; tasks: any }>(
-        "http://localhost:3000/api/tasksbylabel" + label
-      )
-      .pipe(
-        map(taskData => {
-          return taskData.tasks.map(task => {
-            return {
-              id: task._id,
-              title: task.title,
-              notes: task.notes,
-              list: task.list,
-              label: task.labels,
-              reminder: task.reminder,
-              userId: task.userId,
-              groupId: task.groupId
-            };
-          });
-        })
-      )
-      .subscribe(transformedTasks => {
-        transformedTasks.forEach(task => {
-          this.listsService.getListById(task.list).subscribe(list => {
-            if (list.lists != null) {
-              task.list = list.lists.title;
-            } else {
-              task.list = "";
-            }
-          });
-        });
-
-        transformedTasks.forEach(task => {
-          task.label.forEach((label, i) => {
-            this.labelsService.getLabelById(label).subscribe(lbl => {
-              if (lbl.labels != null) {
-                task.label[i] = lbl.labels.title;
-              } else {
-                task.label[i] = "";
-              }
-            });
-          });
-        });
-
-        this.tasks = transformedTasks;
-        this.tasksUpdated.next([...this.tasks]);
-      });
-  }
-
+  
   searchTasks(str: string) {
     let searchedTasks:Task[] = [];
     this.tasks.forEach(task => {
@@ -245,17 +139,7 @@ export class TasksService {
     return searchedTasks;
   }
 
-  getTasksCountByList(list: string) {
-    return this.http.get<{ message: string; noOfTasks: string }>(
-      "http://localhost:3000/api/taskscountbylist" + list
-    );
-  }
-
-  getTasksCountByLabel(label: string) {
-    return this.http.get<{ message: string; noOfTasks: string }>(
-      "http://localhost:3000/api/taskscountbylabel" + label
-    );
-  }
+  
 
   getTaskUpdateListener() {
     return this.tasksUpdated.asObservable();
@@ -265,8 +149,27 @@ export class TasksService {
     return { ...this.transformedTasks.find(t => t._id == taskId) };
   }
 
-  getTasksCountList(list: string) {
-    return { ...this.tasks.find(t => t.list == list) };
+  getTasksByList(list: string) {
+    let tasks : Task[] = [];
+    this.tasks.forEach(task => {
+   
+      if(task.list == list){
+        console.log(task);
+        tasks.push(task);
+      }
+    });
+    return tasks;
+  }
+
+  getTasksByLabel(label: string) {
+    let tasks : Task[] = [];
+    this.tasks.forEach(task => {
+      let index = task.label.indexOf(label);
+      if(index != -1){
+        tasks.push(task);
+      }
+    });
+    return tasks;
   }
 
   deleteTask(taskId: string) {

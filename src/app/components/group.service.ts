@@ -35,7 +35,7 @@ export class GroupsService{
 
         return groupData.groups.map(group =>{
           return {
-            id: group._id,
+            _id: group._id,
             title: group.title,
             members: group.members
           }
@@ -75,13 +75,14 @@ export class GroupsService{
     groupId: string
   ) {
     const task: Task = {
-      id: null,
+      _id: null,
       title: title,
       notes: notes,
       list: list,
       label: label,
       reminder: reminder,
-      groupId : groupId
+      groupId : groupId,
+      userId : null
     };
 
     this.http
@@ -91,7 +92,7 @@ export class GroupsService{
       )
       .subscribe(responseData => {
         const id = responseData.taskId;
-        task.id = id;
+        task._id = id;
         console.log(responseData.message);
         this.tasks.push(task);
         this.tasksUpdated.next([...this.tasks]);
@@ -107,7 +108,7 @@ export class GroupsService{
           tTasks = taskData.tasks;
           return taskData.tasks.map(task => {
             return {
-              id: task._id,
+              _id: task._id,
               title: task.title,
               notes: task.notes,
               list: task.list,
@@ -128,6 +129,14 @@ export class GroupsService{
     return this.tasksUpdated.asObservable();
   }
 
+
+  deleteTask(taskId: string) {
+    return this.http
+      .delete("http://localhost:3000/api/tasks/" + taskId)
+      .subscribe(result => {
+        console.log(result);
+      });
+  }
 
 }
 

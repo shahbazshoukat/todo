@@ -14,11 +14,11 @@ export class LabelsService{
   constructor (private http: HttpClient) {}
 
   addLabel(title: string){
-    const label: Label = {id: null, title: title};
+    const label: Label = {_id: null, title: title};
     this.http.post<{message: string, labelId: string}>('http://localhost:3000/api/labels', label)
     .subscribe(responseData => {
       const id = responseData.labelId;
-      label.id = id;
+      label._id = id;
       console.log(responseData);
       this.labels.push(label);
       this.labelsUpdated.next([...this.labels]);
@@ -32,7 +32,7 @@ export class LabelsService{
 
         return labelData.labels.map(label =>{
           return {
-            id: label._id,
+            _id: label._id,
             title: label.title,
           }
         })
@@ -56,9 +56,10 @@ export class LabelsService{
   }
 
 
-  getLabelById(labelId : string): Observable<any>{
-    return this.http.get<{message: string, labels: any}>('http://localhost:3000/api/labels' + labelId);
+  getLabelById(labelId: string) {
+    return { ...this.labels.find(l => l._id == labelId) };
   }
+
 }
 
 

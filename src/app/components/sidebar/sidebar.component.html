@@ -63,10 +63,10 @@
           </li>
 
           <li class="treeview" *ngFor="let list of lists">
-            <a [routerLink]="['/tasks/lists',list.id]" routerLinkActive="router-link-active" >
+            <a [routerLink]="['/tasks/lists',list.title]" routerLinkActive="router-link-active" >
               <i class="fa fa-pie-chart"></i>
               <span>{{ list.title }}</span>
-              <span (click) = "deleteList(list.id)" class="label label-danger  pull-right " *ngIf="editListFlag"
+              <span (click) = "deleteList(list._id)" class="label label-danger  pull-right " *ngIf="editListFlag"
                 ><i
                   class="glyphicon glyphicon-remove-circle"
                   style="color: white;"
@@ -83,10 +83,10 @@
           ></span></li>
 
           <li *ngFor="let label of labels">
-            <a [routerLink]="['/tasks/labels', label.id]" routerLinkActive="router-link-active" >
+            <a [routerLink]="['/tasks/labels', label.title]" routerLinkActive="router-link-active" >
               <i class="fa fa-angle-right text-red"></i>
               <span>{{ label.title }}</span>
-              <span (click) = "deleteLabel(label.id)" class="label label-danger  pull-right " *ngIf="editLabelFlag"
+              <span (click) = "deleteLabel(label._id)" class="label label-danger  pull-right " *ngIf="editLabelFlag"
                 ><i
                   class="glyphicon glyphicon-remove-circle"
                   style="color: white;"
@@ -105,10 +105,10 @@
             >
           </li>
           <li *ngFor="let group of groups">
-            <a [routerLink]="['/groups', group.id]" routerLinkActive="router-link-active" >
+            <a [routerLink]="['/groups', group._id]" routerLinkActive="router-link-active" >
               <i class="fa fa-angle-right text-red"></i>
               <span>{{ group.title }}</span>
-              <span (click) = "deleteGroup(group.id)" class="label label-danger  pull-right " *ngIf="editGroupFlag"
+              <span (click) = "deleteGroup(group._id)" class="label label-danger  pull-right " *ngIf="editGroupFlag"
                 ><i
                   class="glyphicon glyphicon-remove-circle"
                   style="color: white;"

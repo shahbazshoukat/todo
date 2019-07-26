@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { AddGroupComponent } from './components/add-group/add-group.component';
 import { GroupComponent } from './components/group/group.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
+import { AddMembersComponent } from './components/add-members/add-members.component';
 
 
 const routes: Routes = [
@@ -25,7 +26,8 @@ const routes: Routes = [
   {path: "tasks/labels/:label", component:TaskCardComponent, canActivate: [AuthGuard]},
   {path :"addgroup", component: AddGroupComponent, canActivate: [AuthGuard]},
   {path: "groups/:group", component: GroupComponent, canActivate: [AuthGuard]},
-  {path: "groupmembers/:groupId", component: GroupMembersComponent, canActivate: [AuthGuard]}
+  {path: "groupmembers/:groupId", component: GroupMembersComponent, canActivate: [AuthGuard]},
+  {path: "addmembers/:groupId", component : AddMembersComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

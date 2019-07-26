@@ -11,12 +11,12 @@
       <tr class="active" *ngFor="let task of tasks" >
         <td class="task-row" >
           <label class="checkbox-inline"
-            ><input ngModel (change)="onDelete(task.id)" type="checkbox" value="" />{{task.title}}</label>
+            ><input ngModel (change)="onDelete(task._id)" type="checkbox" value="" />{{task.title}}</label>
           <span class="label label-info" style="margin-left: 5px;">{{task.list}}</span>
 
           <span class="label label-success" style="margin-left: 5px;" *ngFor="let lbl of task.label" >{{lbl}}</span>
           <span class="label label-default" style="margin-left: 5px;">{{task.reminder}}</span>
-          <span  class="label pull-right" (click)="editTask(task.id)" style="color:#bbb"
+          <span  class="label pull-right" (click)="editTask(task._id)" style="color:#bbb"
             ><i class="glyphicon glyphicon-edit"></i
           ></span>
         </td>
