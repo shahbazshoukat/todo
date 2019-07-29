@@ -18,6 +18,7 @@ import { AddGroupComponent } from './components/add-group/add-group.component';
 import { GroupComponent } from './components/group/group.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
 import { AddMembersComponent } from './components/add-members/add-members.component';
+import { RequestComponent } from './components/request/request.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,9 @@ import { AddMembersComponent } from './components/add-members/add-members.compon
 
     GroupMembersComponent,
 
-    AddMembersComponent
+    AddMembersComponent,
+
+    RequestComponent
   ],
   imports: [
     BrowserModule,

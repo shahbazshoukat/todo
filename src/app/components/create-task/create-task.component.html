@@ -25,7 +25,7 @@
               id="sel1"
               style="border-color: transparent; box-shadow: none;"
               name="list"
-              ngModel
+              [ngModel]="this.taskId != null ? taskToUpdate.list : ''"
             >
               <option [value]="list._id" *ngFor="let list of lists" >{{
                 list.title

@@ -2,7 +2,7 @@
   class="bs-example widget-shadow task-card-container col-md-9"
   data-example-id="contextual-table"
 >
-  <h4 style="display: inline">Group</h4>
+  <h4 style="display: inline">Add Members</h4>
 
   <table class="table table-borderless table-hover">
     <thead>
@@ -11,23 +11,32 @@
       </tr>
     </thead>
     <tbody multi="true">
-      <tr class="active" *ngFor="let user of users">
+      <tr class="active" >
         <td class="task-row">
-          <span class="user-icon-span label-default"
-            ><i style="color:white" class="glyphicon glyphicon-user"></i
-          ></span>
-          <span style="margin-left: 10px;">{{ user.name }}</span>
-
-          <button class="pull-right" style="background-color: transparent; border-width: 0px;"
-            ><i
-              class="glyphicon glyphicon-plus"
-            ></i
-          ></button>
+          <div class="row" >
+            <form (submit) = "sendRequest(addMember)"  #addMember = "ngForm" >
+            <div class="col-md-10" >
+              <input
+              style="display: inline"
+              type="email"
+              class="form-control task-input"
+              aria-label="Small"
+              aria-describedby="inputGroup-sizing-sm"
+              name="email"
+              ngModel
+              placeholder="Enter user's email address..."
+            />
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-warning pull-right btn-block" style="display: inline" >Add</button>
+            </div>
+      
+          </form>
+          <span style="margin-left: 20px; margin-top: 20px; color:red;">{{message}}</span>
+          </div>
         </td>
       </tr>
     </tbody>
-    <p *ngIf="users.length <= 0">
-      No Members
-    </p>
+    
   </table>
 </div>

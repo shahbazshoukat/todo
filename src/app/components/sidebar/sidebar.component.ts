@@ -83,13 +83,13 @@ export class SidebarComponent implements OnInit {
     this.tasksService.getTasksByList(list);
   }
 
-  getTasksCountByList(list: string) {
-    return this.tasksService.getTasksCountByList(list);
-  }
+  // getTasksCountByList(list: string) {
+  //   return this.tasksService.getTasksCountByList(list);
+  // }
 
-  getTasksCountByLabel(label: string) {
-    return this.tasksService.getTasksCountByLabel(label);
-  }
+  // getTasksCountByLabel(label: string) {
+  //   return this.tasksService.getTasksCountByLabel(label);
+  //}
 
   getTasksByLabel(label: string) {
     this.tasksService.getTasksByLabel(label);

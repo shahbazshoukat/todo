@@ -1,6 +1,6 @@
 <div class="bs-example widget-shadow task-card-container col-md-9" data-example-id="contextual-table">
-  <h4 style="display: inline">Group</h4>
-  <span class="pull-right"><a [routerLink]="['/addmembers', groupId]" routerLinkActive="router-link-active"  class="btn btn-info">Add Members</a></span>
+  <h4 style="display: inline">Group Members</h4>
+  <span *ngIf="loggedInUser == groupAdmin" class="pull-right"><a [routerLink]="['/addmembers', groupId]" routerLinkActive="router-link-active"  class="btn btn-info">Add Members</a></span>
   <table class="table table-borderless table-hover">
     <thead>
       <tr>
@@ -13,8 +13,8 @@
         <td class="task-row" >
           <span class="user-icon-span label-default" ><i style="color:white" class="glyphicon glyphicon-user"></i></span>
           <span style="margin-left: 10px;">{{member.name}}</span>
-          
-          <span  class="label pull-right" (click)="editTask(task.id)" style="color:#bbb"
+          <span class="label label-default" style="margin-left: 10px;" *ngIf="member._id == groupAdmin" >admin</span>
+          <span *ngIf="loggedInUser == groupAdmin && member._id != groupAdmin"  class="label pull-right" (click)="removeMember(groupId, member._id)" style="color:#bbb"
             ><i class="glyphicon glyphicon-remove-circle"></i
           ></span>
         </td>

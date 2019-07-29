@@ -8,6 +8,7 @@ const List = require("./models/list");
 const User = require("./models/user");
 const Label = require("./models/label");
 const Group = require("./models/group");
+const Request = require("./models/request");
 const checkAuth = require("./middleware/check-auth");
 const app = express();
 
@@ -370,6 +371,32 @@ app.get("/api/groups:id", checkAuth, (req, res, next) => {
   });
 });
 
+app.post("/api/groupmembers", checkAuth, (req, res, next) => {
+  Group.updateOne({ _id: req.body.groupId},{
+    $push: {
+      members:req.userData.userId
+    }
+  }).then(documents => {
+    res.status(200).json({
+      message: "Member Added successfully!",
+      group: documents
+    });
+  });
+});
+
+app.put("/api/groupmembers", checkAuth, (req, res, next) => {
+  Group.updateOne({ _id: req.body.groupId},{
+    $pull: {
+      members:req.body.memberId
+    }
+  }).then(documents => {
+    res.status(200).json({
+      message: "Member Removed successfully!",
+      group: documents
+    });
+  });
+});
+
 app.delete("/api/groups/:id", checkAuth, (req, res, next) => {
   Group.deleteOne({ _id: req.params.id, userId: req.userData.userId }).then(
     result => {
@@ -378,5 +405,54 @@ app.delete("/api/groups/:id", checkAuth, (req, res, next) => {
     }
   );
 });
+
+
+
+//******/Request Api
+
+app.post("/api/requests", checkAuth, (req, res, next) => {
+  const request = new Request({
+    senderId: req.userData.userId,
+    receiverId: req.body.receiverId,
+    groupId: req.body.groupId
+  });
+  request.save().then(createdRequest => {
+    res.status(201).json({
+      message: "Request Added successfully",
+      requestId: createdRequest._id
+    });
+  });
+});
+app.get("/api/requests", checkAuth, (req, res, next) => {
+  Request.find({ receiverId: req.userData.userId }).then(documents => {
+    res.status(200).json({
+      message: "Requests fetched successfully!",
+      requests: documents
+    });
+  });
+});
+
+app.get("/api/requests:id", checkAuth, (req, res, next) => {
+  Request.findOne({ _id: req.params.id, senderId: req.userData.userId }).then(
+    documents => {
+      res.status(200).json({
+        message: "Request fetched successfully!",
+        request: documents
+      });
+    }
+  );
+});
+
+app.delete("/api/requests/:id", checkAuth, (req, res, next) => {
+  Request.deleteOne({ _id: req.params.id}).then(
+    result => {
+      console.log(result);
+      res.status(200).json({ message: "Request deleted!" });
+    }
+  );
+});
+
+
+
 
 module.exports = app;

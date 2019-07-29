@@ -11,10 +11,9 @@ export class UsersService {
   private token: string;
   private tokenTimer: any;
   private authStatusListener = new Subject<boolean>();
-  private user : User;
+  private user: User;
   private username: string;
   private users: any[] = [];
-
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -26,18 +25,23 @@ export class UsersService {
     return this.isAuthenticated;
   }
 
-  getUser(){
-   return this.user;
+  getUser() {
+    return this.user;
   }
-  getUsername(){
+  getUsername() {
     return this.username;
   }
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
 
-  addUser(name:string, email: string, password: string) {
-    const authData: User = {_id:null, name:name, email: email, password: password };
+  addUser(name: string, email: string, password: string) {
+    const authData: User = {
+      _id: null,
+      name: name,
+      email: email,
+      password: password
+    };
     this.http
       .post("http://localhost:3000/api/signup", authData)
       .subscribe(response => {
@@ -46,21 +50,24 @@ export class UsersService {
   }
 
   loginUser(email: string, password: string) {
-    const authData = {email: email, password: password };
+    const authData = { email: email, password: password };
     this.http
-      .post<{ token: string; expiresIn: number, userId: string, name: string, email:string }>(
-        "http://localhost:3000/api/login",
-        authData
-      )
+      .post<{
+        token: string;
+        expiresIn: number;
+        userId: string;
+        name: string;
+        email: string;
+      }>("http://localhost:3000/api/login", authData)
       .subscribe(response => {
         const token = response.token;
         this.token = token;
-        this.user={
-            _id: response.userId,
-            name: response.name,
-            email: response.email,
-            password:""
-        }
+        this.user = {
+          _id: response.userId,
+          name: response.name,
+          email: response.email,
+          password: ""
+        };
 
         if (token) {
           const expiresInDuration = response.expiresIn;
@@ -68,9 +75,16 @@ export class UsersService {
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
           const now = new Date();
-          const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+          const expirationDate = new Date(
+            now.getTime() + expiresInDuration * 1000
+          );
           console.log(expirationDate);
-          this.saveAuthData(token, expirationDate, this.user.name);
+          this.saveAuthData(
+            token,
+            expirationDate,
+            this.user.name,
+            this.user._id
+          );
           this.router.navigate(["/tasks"]);
         }
       });
@@ -102,8 +116,6 @@ export class UsersService {
     this.router.navigate(["/login"]);
   }
 
-
-
   private setAuthTimer(duration: number) {
     console.log("Setting timer: " + duration);
     this.tokenTimer = setTimeout(() => {
@@ -111,16 +123,23 @@ export class UsersService {
     }, duration * 1000);
   }
 
-  private saveAuthData(token: string, expirationDate: Date, username: string) {
+  private saveAuthData(
+    token: string,
+    expirationDate: Date,
+    username: string,
+    userId: string
+  ) {
     localStorage.setItem("token", token);
     localStorage.setItem("expiration", expirationDate.toISOString());
     localStorage.setItem("username", username);
+    localStorage.setItem("userId", userId);
   }
 
   private clearAuthData() {
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
     localStorage.removeItem("username");
+    localStorage.removeItem("userId");
   }
 
   private getAuthData() {
@@ -134,29 +153,35 @@ export class UsersService {
       token: token,
       username: username,
       expirationDate: new Date(expirationDate)
-    }
+    };
   }
 
-  getUserById(userId : string): Observable<any>{
-    return this.http.get<{name: string, email: any}>('http://localhost:3000/api/user' + userId);
+  getUserById(userId: string): Observable<any> {
+    return this.http.get<{ name: string; email: any }>(
+      "http://localhost:3000/api/user" + userId
+    );
   }
 
-  
+  getUserId() {
+    return localStorage.getItem("userId");
+  }
 
-  getUsers(){
+  getUsers() {
     let usr;
-    
-    this.http.get<{message: string, users: any}>('http://localhost:3000/api/user')
-    .subscribe(responseData =>{
-      responseData.users.forEach(user => {
-        usr = {
-          _id : user._id,
-          name : user.name,
-          email : user.email
-        }
-        this.users.push(usr);
+
+    this.http
+      .get<{ message: string; users: any }>("http://localhost:3000/api/user")
+      .subscribe(responseData => {
+        responseData.users.forEach(user => {
+          usr = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            reqStatus: false
+          };
+          this.users.push(usr);
+        });
       });
-    });
     return this.users;
   }
 }

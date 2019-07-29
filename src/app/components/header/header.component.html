@@ -6,12 +6,9 @@
     <!--toggle button end-->
     <div class="profile_details_left"><!--notifications of menu start -->
       <ul class="nofitications-dropdown">
+        
         <li class="dropdown head-dpdn">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-envelope" style="color: white"></i><span class="badge">4</span></a>
-
-        </li>
-        <li class="dropdown head-dpdn">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-bell" style="color: white"></i><span class="badge blue">4</span></a>
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-bell" style="color: white"></i><span class="badge blue">4</span></a>
           <ul class="dropdown-menu">
             <li>
               <div class="notification_header">
@@ -21,8 +18,9 @@
 
           </ul>
         </li>
+        
         <li class="dropdown head-dpdn">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-tasks" style="color:white"></i><span class="badge blue1">8</span></a>
+          <a [routerLink]="['/requests']" routerLinkActive="router-link-active"  role="button" aria-haspopup="true" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-tasks" style="color:white"></i></a>
           <ul class="dropdown-menu">
             <li>
               <div class="notification_header">
