@@ -12,7 +12,7 @@ import { GroupsService } from "../group.service";
 export class RequestComponent implements OnInit {
   requests: Request[] = [];
   transformedRequests: any[] = [];
-  private groupDetails:any;
+  private groupDetails: any;
   private requestsSub: Subscription;
   constructor(
     private requestsService: RequestsService,
@@ -36,7 +36,7 @@ export class RequestComponent implements OnInit {
             this.usersService.getUserById(request.senderId).subscribe(user => {
               usr = user.name;
               req = {
-                _id:request._id,
+                _id: request._id,
                 sender: usr,
                 group: grp,
                 groupId: request.groupId
@@ -49,10 +49,10 @@ export class RequestComponent implements OnInit {
       });
   }
 
-  deleteRequest(reqId: string){
-    this.requestsService.deleteRequest(reqId);
+  deleteRequest(req: any) {
+    this.requestsService.deleteRequest(req._id);
   }
-  acceptRequest(reqId: string, groupId: string ){
+  acceptRequest(reqId: string, groupId: string) {
     this.groupsService.addMember(groupId);
     this.requestsService.deleteRequest(reqId);
   }

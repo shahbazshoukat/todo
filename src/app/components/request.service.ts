@@ -40,6 +40,7 @@ export class RequestsService{
         })
       })
     ).subscribe(transformedRequests =>{
+      
       this.requests = transformedRequests;
       this.requestsUpdated.next([...this.requests]);
     })

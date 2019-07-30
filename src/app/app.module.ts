@@ -19,6 +19,7 @@ import { GroupComponent } from './components/group/group.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
 import { AddMembersComponent } from './components/add-members/add-members.component';
 import { RequestComponent } from './components/request/request.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,9 @@ import { RequestComponent } from './components/request/request.component';
 
     AddMembersComponent,
 
-    RequestComponent
+    RequestComponent,
+
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

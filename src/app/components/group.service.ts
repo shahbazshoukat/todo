@@ -13,6 +13,7 @@ export class GroupsService {
   private tasksUpdated = new Subject<Task[]>();
   constructor(private http: HttpClient) {}
   private username: string;
+  private isMem: boolean = false;
 
   addGroup(title: string) {
     const group: Group = { _id: null, title: title, members: null };
@@ -66,6 +67,9 @@ export class GroupsService {
     return this.http.get<{ message: string; groups: any }>(
       "http://localhost:3000/api/groups" + groupId
     );
+  }
+  getGroupBId(groupId : string){
+    return {...this.groups.find(g => g._id == groupId)};
   }
 
   addTask(
@@ -134,9 +138,20 @@ export class GroupsService {
     return this.tasksUpdated.asObservable();
   }
 
+  isAdmin(userId: string, groupId: string) {
+    let group;
+    this.getGroupById(groupId).subscribe(grp => {
+      group = grp.groups;
+      if (userId == group.userId) {
+        return true;
+      }
+    });
+    return false;
+  }
+
   deleteTask(taskId: string, groupId: string) {
     return this.http
-      .delete("http://localhost:3000/api/tasks/" + taskId)
+      .delete("http://localhost:3000/api/grouptasks/" + taskId)
       .subscribe(result => {
         console.log(result);
         this.getTasks(groupId);
@@ -160,22 +175,6 @@ export class GroupsService {
       });
   }
 
-  isAMember(userId: string, groupId: string){
-    let group;
-    this.getGroupById(groupId).subscribe(grp => {
-     
-      group = grp.groups;
-      if(group.userId == userId){
-        return true;
-      }
-      group.members.foreach(member => {
-        if(member == userId){
-          return true;
-        }
-      });
-      return false;
-    });
+ 
 
-
-  }
 }

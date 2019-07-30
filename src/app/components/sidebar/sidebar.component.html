@@ -63,8 +63,9 @@
           </li>
 
           <li class="treeview" *ngFor="let list of lists">
-            <a [routerLink]="['/tasks/lists',list.title]" routerLinkActive="router-link-active" >
-              <i class="fa fa-pie-chart"></i>
+            
+            <a [routerLink]="['/tasks/lists',list.title]" routerLinkActive="router-link-active"  >
+              
               <span>{{ list.title }}</span>
               <span (click) = "deleteList(list._id)" class="label label-danger  pull-right " *ngIf="editListFlag"
                 ><i
@@ -72,9 +73,6 @@
                   style="color: white;"
                 ></i
               ></span>
-
-
-              <span class="label label-primary pull-right"></span>
             </a>
           </li>
 

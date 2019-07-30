@@ -54,10 +54,11 @@ export class TaskCardComponent implements OnInit, OnDestroy {
           .getTaskUpdateListener()
           .subscribe((tasks: Task[]) => {
             this.tasks = tasks;
-
+            this.tasksService.searchTasks("p");
           });
       }
     });
+
   }
 
   onDelete(taskId: string) {

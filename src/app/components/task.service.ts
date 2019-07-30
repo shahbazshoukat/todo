@@ -15,6 +15,8 @@ export class TasksService {
   private tasks: any = [];
   private tasksUpdated = new Subject<Task[]>();
   private transformedTasks: any = [];
+  private searchedTasks: any = [];
+  private searchedTasksUpdated = new Subject<Task[]>();
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -104,6 +106,7 @@ export class TasksService {
     reminder: string,
     groupId: string
   ) {
+    console.log("inside update service");
     const task: Task = {
       _id: id,
       title: title,
@@ -130,19 +133,23 @@ export class TasksService {
 
   
   searchTasks(str: string) {
-    let searchedTasks:Task[] = [];
+    let sTasks:any = [];
     this.tasks.forEach(task => {
-      if(task.title.search(str)){
-        searchedTasks.push(task);
+      if(task.title.indexOf(str) != -1){
+        sTasks.push(task);
       }
     });
-    return searchedTasks;
+    this.searchTasks = sTasks;
+    this.searchedTasksUpdated.next([...this.searchedTasks]);
   }
 
   
 
   getTaskUpdateListener() {
     return this.tasksUpdated.asObservable();
+  }
+  getSearchedTaskUpdateListener() {
+    return this.searchedTasksUpdated.asObservable();
   }
 
   getTaskById(taskId: string) {

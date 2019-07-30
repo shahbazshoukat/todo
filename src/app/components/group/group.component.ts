@@ -6,6 +6,7 @@ import { Task } from "../task.model";
 import { Subscription } from "rxjs";
 import { GroupsService } from "../group.service";
 import { UsersService } from "../user.service";
+import { Group } from "../group.model";
 @Component({
   selector: "app-group",
   templateUrl: "./group.component.html",
@@ -16,7 +17,8 @@ export class GroupComponent implements OnInit {
   tasks: Task[] = [];
   addedBy: string;
   loggedInUser: string = "";
-  isAMember:any;
+  isAMember: any;
+  private groups: Group[] = [];
   private groupsSub: Subscription;
   constructor(
     private groupsService: GroupsService,
@@ -28,10 +30,10 @@ export class GroupComponent implements OnInit {
 
   ngOnInit() {
     this.loggedInUser = this.usersService.getUserId();
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("group")) {
-        this.groupId = paramMap.get("group");
-       
+      if (paramMap.has("groupId")) {
+        this.groupId = paramMap.get("groupId");
         this.groupsService.getTasks(this.groupId);
         this.groupsSub = this.groupsService
           .getTaskUpdateListener()
@@ -72,19 +74,4 @@ export class GroupComponent implements OnInit {
     console.log(taskId);
     this.groupsService.deleteTask(taskId, this.groupId);
   }
-
-  // isAMember(userId: string, groupId: string) {
-  //   let group;
-  //   this.groupsService.getGroupById(groupId).subscribe(grp => {
-  //     group = grp;
-  //   });
-  //   group.groups.members.forEach(member => {
-  //     console.log(member);
-  //     console.log(userId);
-  //     if (member == userId) {
-  //       return true;
-  //     }
-  //   });
-  //   return false;
-  // }
 }

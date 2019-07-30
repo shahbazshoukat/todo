@@ -223,20 +223,15 @@ app.get("/api/tasks:id", checkAuth, (req, res, next) => {
 });
 
 app.put("/api/tasks/:id", checkAuth, (req, res, next) => {
-  const task = new Task({
-    _id: req.body.id,
-    title: req.body.title,
-    notes: req.body.notes,
-    list: req.body.list,
-    labels: req.body.label,
-    reminder: req.body.reminder,
-    userId: req.userData.userId,
-    completeStatus: false
-  });
-
   Task.updateOne(
     { _id: req.params.id, userId: req.userData.userId },
-    task
+    {
+      title: req.body.title,
+      notes: req.body.notes,
+      list: req.body.list,
+      labels: req.body.label,
+      reminder: req.body.reminder
+    }
   ).then(result => {
     res.status(200).json({ message: "Update successful!", result: result });
   });
@@ -249,6 +244,13 @@ app.delete("/api/tasks/:id", checkAuth, (req, res, next) => {
       res.status(200).json({ message: "Task deleted!" });
     }
   );
+});
+
+app.delete("/api/grouptasks/:id", checkAuth, (req, res, next) => {
+  Task.deleteOne({ _id: req.params.id }).then(result => {
+    console.log(result);
+    res.status(200).json({ message: "Task deleted!" });
+  });
 });
 
 //*****List API */
@@ -372,11 +374,14 @@ app.get("/api/groups:id", checkAuth, (req, res, next) => {
 });
 
 app.post("/api/groupmembers", checkAuth, (req, res, next) => {
-  Group.updateOne({ _id: req.body.groupId},{
-    $push: {
-      members:req.userData.userId
+  Group.updateOne(
+    { _id: req.body.groupId },
+    {
+      $push: {
+        members: req.userData.userId
+      }
     }
-  }).then(documents => {
+  ).then(documents => {
     res.status(200).json({
       message: "Member Added successfully!",
       group: documents
@@ -385,11 +390,14 @@ app.post("/api/groupmembers", checkAuth, (req, res, next) => {
 });
 
 app.put("/api/groupmembers", checkAuth, (req, res, next) => {
-  Group.updateOne({ _id: req.body.groupId},{
-    $pull: {
-      members:req.body.memberId
+  Group.updateOne(
+    { _id: req.body.groupId },
+    {
+      $pull: {
+        members: req.body.memberId
+      }
     }
-  }).then(documents => {
+  ).then(documents => {
     res.status(200).json({
       message: "Member Removed successfully!",
       group: documents
@@ -405,8 +413,6 @@ app.delete("/api/groups/:id", checkAuth, (req, res, next) => {
     }
   );
 });
-
-
 
 //******/Request Api
 
@@ -444,15 +450,10 @@ app.get("/api/requests:id", checkAuth, (req, res, next) => {
 });
 
 app.delete("/api/requests/:id", checkAuth, (req, res, next) => {
-  Request.deleteOne({ _id: req.params.id}).then(
-    result => {
-      console.log(result);
-      res.status(200).json({ message: "Request deleted!" });
-    }
-  );
+  Request.deleteOne({ _id: req.params.id }).then(result => {
+    console.log(result);
+    res.status(200).json({ message: "Request deleted!" });
+  });
 });
-
-
-
 
 module.exports = app;
