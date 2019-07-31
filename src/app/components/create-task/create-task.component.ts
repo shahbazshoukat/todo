@@ -31,7 +31,7 @@ export class CreateTaskComponent implements OnInit {
 
   labels: Label[] = [];
   private labelsSub: Subscription;
-
+  isLoading = false;
   constructor(
     private tasksService: TasksService,
     private listsService: ListsService,
@@ -116,7 +116,9 @@ export class CreateTaskComponent implements OnInit {
       if (paramMap.has("taskId")) {
         this.mode = "edit";
         this.taskId = paramMap.get("taskId");
+        this.isLoading = true;
         this.taskToUpdate = this.tasksService.getTaskById(this.taskId);
+        this.isLoading = false;
         console.log(this.taskToUpdate);
       } else {
         this.mode = "create";

@@ -7,8 +7,9 @@
 
       </tr>
     </thead>
-    <tbody multi="true" *ngIf="tasks.length > 0" >
-      <tr class="active" *ngFor="let task of tasks" >
+    <div class="loader" *ngIf="isLoading" style="margin: auto;" ></div>
+    <tbody multi="true" *ngIf="tasks.length > 0 && isLoading == false"  >
+      <tr class="active" *ngFor="let task of tasks"  >
         <td class="task-row" >
           <label class="checkbox-inline"
             ><input ngModel (change)="onDelete(task._id)" type="checkbox" value="" />{{task.title}}</label>
@@ -25,7 +26,7 @@
 
 
     </tbody>
-    <p *ngIf = "tasks.length <= 0">
+    <p *ngIf = "tasks.length <= 0 && !isLoading ">
       No Task Added yet!
     </p>
   </table>

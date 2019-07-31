@@ -10,20 +10,30 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
 
+  errorMessage = "";
+  isValid = true;
   private userSub : Subscription
   constructor(private router: Router,public usersService: UsersService) { }
 
-  onLogin(form: NgForm){
+  async onLogin(form: NgForm){
     if(form.invalid){
       return;
     }
-    this.usersService.loginUser(form.value.email, form.value.password);
-
+    await this.usersService.loginUser(form.value.email, form.value.password);
+    this.isValid = this.usersService.getIsAuth();
+    if(!this.isValid){
+      this.errorMessage = "username or password incorrect";
+    }
+    console.log(this.isValid);
 
     form.resetForm();
   }
 
   ngOnInit() {
+    const isAuth = this.usersService.getIsAuth();
+    if(isAuth){
+      this.router.navigate(["/tasks"]);
+    }
   }
 
 }

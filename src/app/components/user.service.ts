@@ -60,6 +60,7 @@ export class UsersService {
         email: string;
       }>("http://localhost:3000/api/login", authData)
       .subscribe(response => {
+        
         const token = response.token;
         this.token = token;
         this.user = {
@@ -88,6 +89,7 @@ export class UsersService {
           this.router.navigate(["/tasks"]);
         }
       });
+     
   }
 
   autoAuthUser() {

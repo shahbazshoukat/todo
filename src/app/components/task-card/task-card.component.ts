@@ -14,6 +14,7 @@ import { UsersService } from '../user.service';
 })
 export class TaskCardComponent implements OnInit, OnDestroy {
 
+  isLoading = false;
   tasks: Task[] = [];
   tasks2: Task[] = [];
   private tasksSub: Subscription;
@@ -30,8 +31,10 @@ export class TaskCardComponent implements OnInit, OnDestroy {
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("list")) {
+        this.isLoading = true;
         this.taskCardTitle = "Lists";
         this.tasks = this.tasksService.getTasksByList(paramMap.get("list"));
+        this.isLoading = false;
         console.log(this.tasks);
         this.tasksSub = this.tasksService
           .getTaskUpdateListener()
@@ -39,22 +42,25 @@ export class TaskCardComponent implements OnInit, OnDestroy {
             //this.tasks = tasks;
           });
       } else if (paramMap.has("label")) {
+        this.isLoading = true;
         this.taskCardTitle = "Labels";
         this.tasks = this.tasksService.getTasksByLabel(paramMap.get("label"));
+        this.isLoading = false;
         this.tasksSub = this.tasksService
           .getTaskUpdateListener()
           .subscribe((tasks: Task[]) => {
             //this.tasks = tasks;
           });
       } else {
-        
+        this.isLoading = true;
         this.taskCardTitle = "All Tasks";
         this.tasksService.getTasks();
         this.tasksSub = this.tasksService
           .getTaskUpdateListener()
           .subscribe((tasks: Task[]) => {
             this.tasks = tasks;
-            this.tasksService.searchTasks("p");
+            this.isLoading = false;
+            //this.tasksService.searchTasks("p");
           });
       }
     });

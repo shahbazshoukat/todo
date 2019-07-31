@@ -54,6 +54,7 @@ export class TasksService {
         console.log(responseData.message);
         this.tasks.push(task);
         this.tasksUpdated.next([...this.tasks]);
+        this.router.navigate(["/tasks"]);
       });
   }
 

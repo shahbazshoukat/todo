@@ -2,8 +2,11 @@
   class="bs-example widget-shadow task-card-container col-md-9"
   data-example-id="contextual-table"
 >
-  <h4>Add a Task</h4>
-  <form (submit)="onAddTask(taskForm)" #taskForm="ngForm">
+
+
+  <h4 *ngIf="!isLoading">Add a Task</h4>
+  <div class="loader" *ngIf="isLoading" style="margin: auto;" ></div>
+  <form (submit)="onAddTask(taskForm)" #taskForm="ngForm" *ngIf="!isLoading" >
     <div class="container">
       <div class="row" style="padding: 20px; ">
         <div class="col-md-8" style="border-right-width: 2px;">

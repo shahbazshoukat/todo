@@ -21,9 +21,9 @@
         <div class="form-left-to-w3l">
           <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
           <input type="email" name="email" ngModel placeholder="Email" required />
-
           <div class="clear"></div>
         </div>
+        
         <div class="form-left-to-w3l ">
           <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
           <input
@@ -35,6 +35,7 @@
           />
           <div class="clear"></div>
         </div>
+        
         <div class="main-two-w3ls">
           <div class="left-side-forget">
               <input type="checkbox" class="checked">
@@ -44,7 +45,7 @@
               <a href="#" class="for">Forgot password?</a>
           </div>
       </div>
-
+      <span style="color:red; font-size: 12px;" *ngIf="!isValid">{{errorMessage}}</span>
         <div class="btnn" style="margin-top: 70px">
           <button style="height:50px" type="submit">Login</button>
         </div>
