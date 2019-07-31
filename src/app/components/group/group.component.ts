@@ -7,12 +7,15 @@ import { Subscription } from "rxjs";
 import { GroupsService } from "../group.service";
 import { UsersService } from "../user.service";
 import { Group } from "../group.model";
+import io from "socket.io-client";
 @Component({
   selector: "app-group",
   templateUrl: "./group.component.html",
   styleUrls: ["./group.component.css"]
 })
 export class GroupComponent implements OnInit {
+  isLoading = false;
+  socket;
   groupId: string;
   tasks: Task[] = [];
   addedBy: string;
@@ -26,15 +29,21 @@ export class GroupComponent implements OnInit {
     private usersService: UsersService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.socket = io("http://localhost:3000");
+  }
 
   ngOnInit() {
     this.loggedInUser = this.usersService.getUserId();
-
+    this.usersService.getUsers();
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("groupId")) {
         this.groupId = paramMap.get("groupId");
+        this.isLoading = true;
         this.groupsService.getTasks(this.groupId);
+        this.socket.on("tasksPage", () => {
+          this.groupsService.getTasks(this.groupId);
+        });
         this.groupsSub = this.groupsService
           .getTaskUpdateListener()
           .subscribe((tasks: any[]) => {
@@ -44,6 +53,7 @@ export class GroupComponent implements OnInit {
                 task.userId = user.name;
               });
             });
+            this.isLoading = false;
           });
       } else {
         this.groupId = null;
@@ -68,10 +78,12 @@ export class GroupComponent implements OnInit {
       this.addedBy
     );
     form.resetForm();
+    this.socket.emit("tasks", {});
   }
 
   onDelete(taskId: string) {
     console.log(taskId);
     this.groupsService.deleteTask(taskId, this.groupId);
+    this.socket.emit("tasks", {});
   }
 }

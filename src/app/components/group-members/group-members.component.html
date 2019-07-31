@@ -8,7 +8,8 @@
 
       </tr>
     </thead>
-    <tbody multi="true"  >
+    <div class="loader" *ngIf="isLoading" style="margin: auto;" ></div>
+    <tbody multi="true" *ngIf="members.length > 0 && !isLoading" >
       <tr class="active" *ngFor="let member of members" >
         <td class="task-row" >
           <span class="user-icon-span label-default" ><i style="color:white" class="glyphicon glyphicon-user"></i></span>
@@ -23,7 +24,7 @@
 
 
     </tbody>
-    <p *ngIf = "members.length <= 0">
+    <p *ngIf = "members.length <= 0 && !isLoading">
       No Members
     </p>
   </table>

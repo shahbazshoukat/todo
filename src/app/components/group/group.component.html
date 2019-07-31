@@ -8,7 +8,8 @@
 
       </tr>
     </thead>
-    <tbody multi="true" *ngIf="tasks.length > 0" >
+    <div class="loader" *ngIf="isLoading" style="margin: auto;" ></div>
+    <tbody multi="true" *ngIf="tasks.length > 0 && !isLoading" >
       <tr class="active" *ngFor="let task of tasks" >
         <td class="task-row" >
           <label class="checkbox-inline"
@@ -22,7 +23,7 @@
 
 
     </tbody>
-    <div class="row" >
+    <div class="row"  >
       <form (submit) = "addTask(groupTaskForm)"  #groupTaskForm = "ngForm" >
       <div class="col-md-10" >
         <input
@@ -42,7 +43,7 @@
 
     </form>
     </div>
-    <p *ngIf="tasks.length <= 0">
+    <p *ngIf="tasks.length <= 0 && !isLoading">
       No Task Added yet!
     </p>
   </table>

@@ -5,12 +5,15 @@ import { UsersService } from "../user.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Member } from "../member.model";
 import { Subject, Subscription } from "rxjs";
+import io from "socket.io-client";
 @Component({
   selector: "app-group-members",
   templateUrl: "./group-members.component.html",
   styleUrls: ["./group-members.component.css"]
 })
 export class GroupMembersComponent implements OnInit {
+  socket;
+  isLoading = false;
   private group: Group;
   groupAdmin: string;
   loggedInUser: string;
@@ -23,16 +26,23 @@ export class GroupMembersComponent implements OnInit {
     private groupsService: GroupsService,
     private route: ActivatedRoute,
     private usersService: UsersService
-  ) {}
+  ) {
+    this.socket = io("http://localhost:3000");
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("groupId")) {
+        this.isLoading = true;
         this.groupId = paramMap.get("groupId");
         this.getMembers(this.groupId);
+        this.socket.on("membersPage", () => {
+          this.getMembers(this.groupId);
+        });
         this.memberssSub = this.getMembersUpdateListener().subscribe(
           (members: Member[]) => {
             this.members2 = members;
+            this.isLoading = false;
           }
         );
       } else {
@@ -77,6 +87,7 @@ export class GroupMembersComponent implements OnInit {
   }
   removeMember(grpId: string, memId: string) {
     this.groupsService.removeMember(grpId, memId);
+    this.socket.emit("members", {});
     this.getMembers(grpId);
     this.memberssSub = this.getMembersUpdateListener().subscribe(
       (members: Member[]) => {

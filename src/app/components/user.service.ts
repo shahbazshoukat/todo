@@ -186,4 +186,7 @@ export class UsersService {
       });
     return this.users;
   }
+  getUserBId(userId: string) {
+    return { ...this.users.find(u => u._id == userId) };
+  }
 }

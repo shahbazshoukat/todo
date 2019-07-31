@@ -47,6 +47,18 @@ const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 const server = http.createServer(app);
+var io=require('socket.io').listen(server);
+io.on('connect',socket=> {
+  console.log("socket on")
+  socket.on('tasks',(data)=>{
+    console.log("inside socket");
+    io.emit('tasksPage',{})
+  });
+  socket.on('members',(data)=>{
+    console.log("inside socket");
+    io.emit('membersPage',{})
+  })
+});
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);
