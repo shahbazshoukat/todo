@@ -10,6 +10,11 @@ import { LabelsService } from "./label.service";
 import { stringify } from "querystring";
 import { TaskCardComponent } from "./task-card/task-card.component";
 
+import {environment} from "../../environments/environment";
+
+
+const BACKEND_URL = environment.apiURL;
+
 @Injectable({ providedIn: "root" })
 export class TasksService {
   private tasks: any = [];
@@ -45,7 +50,7 @@ export class TasksService {
 
     this.http
       .post<{ message: string; taskId: string }>(
-        "http://localhost:3000/api/tasks",
+        BACKEND_URL +  "tasks",
         task
       )
       .subscribe(responseData => {
@@ -61,7 +66,7 @@ export class TasksService {
   getTasks() {
     let tTasks;
     this.http
-      .get<{ message: string; tasks: any }>("http://localhost:3000/api/tasks")
+      .get<{ message: string; tasks: any }>(BACKEND_URL +  "tasks")
       .pipe(
         map(taskData => {
           tTasks = taskData.tasks;
@@ -120,7 +125,7 @@ export class TasksService {
     };
 
     this.http
-      .put("http://localhost:3000/api/tasks/" + id, task)
+      .put(BACKEND_URL +  "tasks/" + id, task)
       .subscribe(response => {
         console.log(response);
         const updatedTasks = [...this.tasks];
@@ -182,7 +187,7 @@ export class TasksService {
 
   deleteTask(taskId: string) {
     return this.http
-      .delete("http://localhost:3000/api/tasks/" + taskId)
+      .delete(BACKEND_URL +  "tasks/" + taskId)
       .subscribe(result => {
         console.log(result);
         this.getTasks();

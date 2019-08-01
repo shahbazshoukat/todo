@@ -5,6 +5,11 @@ import { map } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Task } from "./task.model";
 
+import {environment} from "../../environments/environment";
+
+
+const BACKEND_URL = environment.apiURL;
+
 @Injectable({ providedIn: "root" })
 export class GroupsService {
   private groups: any = [];
@@ -19,7 +24,7 @@ export class GroupsService {
     const group: Group = { _id: null, title: title, members: null };
     this.http
       .post<{ message: string; groupId: string }>(
-        "http://localhost:3000/api/groups",
+        BACKEND_URL + "groups",
         group
       )
       .subscribe(responseData => {
@@ -33,7 +38,7 @@ export class GroupsService {
 
   getGroups() {
     this.http
-      .get<{ message: string; groups: any }>("http://localhost:3000/api/groups")
+      .get<{ message: string; groups: any }>(BACKEND_URL + "groups")
       .pipe(
         map(groupData => {
           return groupData.groups.map(group => {
@@ -56,7 +61,7 @@ export class GroupsService {
 
   deleteGroup(groupId: string) {
     return this.http
-      .delete("http://localhost:3000/api/groups/" + groupId)
+      .delete(BACKEND_URL + "groups/" + groupId)
       .subscribe(result => {
         console.log(result);
         this.getGroups();
@@ -65,7 +70,7 @@ export class GroupsService {
 
   getGroupById(groupId: string): Observable<any> {
     return this.http.get<{ message: string; groups: any }>(
-      "http://localhost:3000/api/groups" + groupId
+      BACKEND_URL + "groups" + groupId
     );
   }
   getGroupBId(groupId : string){
@@ -94,7 +99,7 @@ export class GroupsService {
 
     this.http
       .post<{ message: string; taskId: string }>(
-        "http://localhost:3000/api/tasks",
+        BACKEND_URL + "tasks",
         task
       )
       .subscribe(responseData => {
@@ -110,7 +115,7 @@ export class GroupsService {
     let tTasks;
     this.http
       .get<{ message: string; tasks: any }>(
-        "http://localhost:3000/api/tasksbygroup" + groupId
+        BACKEND_URL + "tasksbygroup" + groupId
       )
       .pipe(
         map(taskData => {
@@ -151,7 +156,7 @@ export class GroupsService {
 
   deleteTask(taskId: string, groupId: string) {
     return this.http
-      .delete("http://localhost:3000/api/grouptasks/" + taskId)
+      .delete(BACKEND_URL + "grouptasks/" + taskId)
       .subscribe(result => {
         console.log(result);
         this.getTasks(groupId);
@@ -160,7 +165,7 @@ export class GroupsService {
   addMember(grpId: string) {
     const group = { groupId: grpId };
     this.http
-      .post("http://localhost:3000/api/groupmembers/", group)
+      .post(BACKEND_URL + "groupmembers/", group)
       .subscribe(result => {
         console.log(result);
       });
@@ -169,7 +174,7 @@ export class GroupsService {
   removeMember(grpId: string, memId) {
     const group = { groupId: grpId, memberId: memId };
     this.http
-      .put("http://localhost:3000/api/groupmembers/", group)
+      .put(BACKEND_URL + "groupmembers/", group)
       .subscribe(result => {
         console.log(result);
       });

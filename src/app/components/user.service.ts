@@ -2,8 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject, Observable } from "rxjs";
-
 import { User } from "./user.model";
+import {environment} from "../../environments/environment";
+
+
+const BACKEND_URL = environment.apiURL;
 
 @Injectable({ providedIn: "root" })
 export class UsersService {
@@ -43,7 +46,7 @@ export class UsersService {
       password: password
     };
     this.http
-      .post("http://localhost:3000/api/signup", authData)
+      .post(BACKEND_URL + "signup", authData)
       .subscribe(response => {
         console.log(response);
       });
@@ -58,7 +61,7 @@ export class UsersService {
         userId: string;
         name: string;
         email: string;
-      }>("http://localhost:3000/api/login", authData)
+      }>(BACKEND_URL + "login", authData)
       .subscribe(response => {
         
         const token = response.token;
@@ -160,7 +163,7 @@ export class UsersService {
 
   getUserById(userId: string): Observable<any> {
     return this.http.get<{ name: string; email: any }>(
-      "http://localhost:3000/api/user" + userId
+      BACKEND_URL + "user" + userId
     );
   }
 
@@ -172,7 +175,7 @@ export class UsersService {
     let usr;
 
     this.http
-      .get<{ message: string; users: any }>("http://localhost:3000/api/user")
+      .get<{ message: string; users: any }>(BACKEND_URL + "user")
       .subscribe(responseData => {
         responseData.users.forEach(user => {
           usr = {

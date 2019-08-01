@@ -66,8 +66,6 @@ export class GroupComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-    console.log(form);
-    console.log(this.groupId);
     this.groupsService.addTask(
       form.value.title,
       null,

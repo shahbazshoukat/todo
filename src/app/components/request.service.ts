@@ -4,7 +4,10 @@ import {Subject, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {HttpClient} from '@angular/common/http';
 
+import {environment} from "../../environments/environment";
 
+
+const BACKEND_URL = environment.apiURL;
 
 @Injectable({providedIn:'root'})
 export class RequestsService{
@@ -15,7 +18,7 @@ export class RequestsService{
 
   addRequest(receiverId: string, groupId: string){
     const request: Request = {_id: null, senderId: null, receiverId: receiverId, groupId: groupId};
-    this.http.post<{message: string, requestId: string}>('http://localhost:3000/api/requests', request)
+    this.http.post<{message: string, requestId: string}>(BACKEND_URL + 'requests', request)
     .subscribe(responseData => {
       const id = responseData.requestId;
       request._id = id;
@@ -26,7 +29,7 @@ export class RequestsService{
   }
 
   getRequests(){
-    this.http.get<{message: string, requests: any}>('http://localhost:3000/api/requests')
+    this.http.get<{message: string, requests: any}>(BACKEND_URL + 'requests')
     .pipe(
       map(requestData =>{
 
@@ -51,7 +54,7 @@ export class RequestsService{
 
   deleteRequest(requestId: string) {
     return this.http
-      .delete("http://localhost:3000/api/requests/" + requestId).subscribe(result => {
+      .delete(BACKEND_URL + "requests/" + requestId).subscribe(result => {
         console.log(result);
         this.getRequests();
       });
