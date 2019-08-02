@@ -1,23 +1,21 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-exports.createUser = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10).then(hash => {
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hash
-      });
-      user.save().then(createdUser => {
-        res.status(201).json({
-          message: "User Added Successfully",
-          userId: createdUser._id
-        });
-      });
-    });
-  };
+const UserManager = require("../managers/users");
 
-  exports.loginUser = (req, res, next) => {
+class UserController {
+  static async createUser(req, res) {
+    try {
+      const doc = await UserManager.createUser(req.body);
+      res.status(201).json({
+        message: "User Added Successfully",
+        userId: doc._id
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async loginUser(req, res) {
     let fetchedUser;
     User.findOne({ email: req.body.email })
       .then(user => {
@@ -53,22 +51,31 @@ exports.createUser = (req, res, next) => {
           message: "Auth failed"
         });
       });
-  };
+  }
 
-  exports.getUser = (req, res, next) => {
-    User.findOne({ _id: req.params.id }).then(user => {
-      res.status(200).json({
-        name: user.name,
-        email: user.email
-      });
-    });
-  };
-
-  exports.getUsers = (req, res, next) => {
-    User.find().then(documents => {
+  static async getUsers(req, res) {
+    try {
+      const doc = await UserManager.getUsers();
       res.status(200).json({
         message: "Users fetched successfully!",
-        users: documents
+        users: doc
       });
-    });
-  };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async getUser(req, res) {
+    try {
+      const doc = await UserManager.getUser(req.params.id);
+      res.status(200).json({
+        name: doc.name,
+        email: doc.email
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+module.exports = UserController;

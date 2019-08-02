@@ -1,138 +1,123 @@
 const Task = require("../models/task");
+const TaskManager = require("../managers/tasks");
 
-exports.createTask = (req, res, next) => {
-    const task = new Task({
-      title: req.body.title,
-      notes: req.body.notes,
-      list: req.body.list,
-      labels: req.body.label,
-      reminder: req.body.reminder,
-      userId: req.userData.userId,
-      groupId: req.body.groupId,
-      completeStatus: false
-    });
-    task.save().then(createdTask => {
+class TaskController {
+  static async createTask(req, res) {
+    try {
+      const doc = await TaskManager.createTask(req.body, req.userData.userId);
       res.status(201).json({
         message: "Task Added successfully",
-        taskId: createdTask._id
+        taskId: doc._id
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.updateTask = (req, res, next) => {
-    Task.updateOne(
-      { _id: req.params.id, userId: req.userData.userId },
-      {
-        title: req.body.title,
-        notes: req.body.notes,
-        list: req.body.list,
-        labels: req.body.label,
-        reminder: req.body.reminder
-      }
-    ).then(result => {
-      res.status(200).json({ message: "Update successful!", result: result });
-    });
+  static async updateTask(req, res) {
+    try {
+      const doc = await TaskManager.updateTask(req.body, req.userData.userId, req.params.id);
+      res.status(200).json({ message: "Update successful!", result: doc });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.deleteTask = (req, res, next) => {
-    Task.deleteOne({ _id: req.params.id, userId: req.userData.userId }).then(
-      result => {
-        console.log(result);
-        res.status(200).json({ message: "Task deleted!" });
-      }
-    );
-  };
-
-  exports.deleteGroupTask = (req, res, next) => {
-    Task.deleteOne({ _id: req.params.id }).then(result => {
-      console.log(result);
+  static async deleteTask(req, res) {
+    try {
+      const doc = await TaskManager.deleteTask(req.params.id, req.userData.userId);
       res.status(200).json({ message: "Task deleted!" });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.getTasks = (req, res, next) => {
-    Task.find({ userId: req.userData.userId, groupId: null }).then(documents => {
+  static async deleteGroupTask(req, res) {
+    try {
+      const doc = await TaskManager.deleteGroupTask(req.params.id);
+      res.status(200).json({ message: "Task deleted!" });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  static async getTasks(req, res) {
+    try {
+      const doc = await TaskManager.getTasks(req.userData.userId);
       res.status(200).json({
         message: "Tasks fetched successfully!",
-        tasks: documents
+        tasks: doc
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.getTask = (req, res, next) => {
-    Task.findOne({
-      userId: req.userData.userId,
-      _id: req.params.id,
-      groupId: null
-    }).then(documents => {
+  static async getTask(req, res) {
+    try {
+      const doc = await TaskManager.getTask(req.params.id, req.userData.userId);
       res.status(200).json({
         message: "Task fetched successfully!",
-        task: documents
+        task: doc
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.getTasksByList = (req, res, next) => {
-    Task.find({
-      list: req.params.list,
-      userId: req.userData.userId,
-      groupId: null
-    }).then(documents => {
+  static async getTasksByList(req, res) {
+    const doc = await TaskManager.getTasksByList(req.params.list, req.userData.userId);
+    res.status(200).json({
+      message: "Tasks fetched successfully!",
+      tasks: doc
+    });
+    try {
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  static async getTasksByLabel(req, res) {
+    try {
+      const doc = await TaskManager.getTasksByLabel(
+        req.params.label,
+        req.userData.userId
+      );
       res.status(200).json({
         message: "Tasks fetched successfully!",
-        tasks: documents
+        tasks: doc
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.getTasksByLabel = (req, res, next) => {
-    Task.find({
-      userId: req.userData.userId,
-      labels: req.params.label,
-      groupId: null
-    }).then(documents => {
+  static async getTasksByGroup(req, res) {
+    try {
+      const doc = await TaskManager.getTasksByGroup(req.params.group);
       res.status(200).json({
         message: "Tasks fetched successfully!",
-        tasks: documents
+        tasks: doc
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  exports.getTasksByGroup = (req, res, next) => {
-    Task.find({ groupId: req.params.group }).then(documents => {
+  static async getTasksCountByList(req, res) {
+    try {
+      const doc = await TaskManager.getTasksCountByList(req.params.list, req.userData.userId);
       res.status(200).json({
         message: "Tasks fetched successfully!",
-        tasks: documents
+        noOfTasks: doc
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
+  static async getTasksCountByLabel(req, res) {
+    try {
+      const doc = await TaskManager.getTasksCountByLabel(req.params.label, req.userData.userId);
+      res.status(200).json({
+        message: "Tasks fetched successfully!",
+        noOfTasks: doc
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
 
-  exports.getTasksCountByList = (req, res, next) => {
-    Task.find({
-      list: req.params.list,
-      userId: req.userData.userId,
-      groupId: null
-    })
-      .count()
-      .then(noOfTasks => {
-        res.status(200).json({
-          message: "Tasks fetched successfully!",
-          noOfTasks: noOfTasks
-        });
-      });
-  };
 
-  exports.getTasksCountByLabel = (req, res, next) => {
-    Task.find({
-      label: req.params.label,
-      userId: req.userData.userId,
-      groupId: null
-    })
-      .count()
-      .then(noOfTasks => {
-        res.status(200).json({
-          message: "Tasks fetched successfully!",
-          noOfTasks: noOfTasks
-        });
-      });
-  };
+module.exports = TaskController;

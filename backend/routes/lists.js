@@ -1,17 +1,17 @@
 const express = require("express");
-const List = require("../models/list");
+
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
-const listsController = require("../controllers/lists");
+const ListsController = require("../controllers/lists");
 
 
 
-router.post("/lists", checkAuth, listsController.createList);
-  router.get("/lists", checkAuth, listsController.getLists);
+router.post("/lists", checkAuth, ListsController.createList);
+  router.get("/lists", checkAuth, ListsController.getLists);
   
-  router.get("/lists:id", checkAuth, listsController.getList);
+  router.get("/lists:id", checkAuth, ListsController.getList);
   
-  router.delete("/lists/:id", checkAuth, listsController.deleteList);
+  router.delete("/lists/:id", checkAuth, ListsController.deleteList);
 
 
 module.exports = router;

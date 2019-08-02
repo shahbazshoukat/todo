@@ -70,6 +70,7 @@ export class TasksService {
       .pipe(
         map(taskData => {
           tTasks = taskData.tasks;
+          console.log(taskData);
           return taskData.tasks.map(task => {
             return {
               _id: task._id,

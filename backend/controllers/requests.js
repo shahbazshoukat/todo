@@ -1,43 +1,51 @@
-const Request = require("../models/request");
 
-exports.createRequest =  (req, res, next) => {
-    const request = new Request({
-      senderId: req.userData.userId,
-      receiverId: req.body.receiverId,
-      groupId: req.body.groupId
-    });
-    request.save().then(createdRequest => {
+const RequestManager = require("../managers/requests");
+
+class RequestController {
+  static async createRequest(req, res) {
+    try {
+      const doc = await RequestManager.createRequest(req.body, req.userData.userId);
       res.status(201).json({
         message: "Request Added successfully",
-        requestId: createdRequest._id
+        requestId: doc._id
       });
-    });
-  };
-
-  exports.getRequests =  (req, res, next) => {
-    Request.find({ receiverId: req.userData.userId }).then(documents => {
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async getRequests(req, res) {
+    try {
+      const doc = await RequestManager.getRequests(req.userData.userId);
+      console.log(doc);
       res.status(200).json({
         message: "Requests fetched successfully!",
-        requests: documents
+        requests: doc
       });
-    });
-  };
-  
-  exports.getRequest =  (req, res, next) => {
-    Request.findOne({ _id: req.params.id, senderId: req.userData.userId }).then(
-      documents => {
-        res.status(200).json({
-          message: "Request fetched successfully!",
-          request: documents
-        });
-      }
-    );
-  };
-
-  exports.deleteRequest =  (req, res, next) => {
-    Request.deleteOne({ _id: req.params.id }).then(result => {
-      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async getRequest(req, res) {
+    try {
+      const doc = await RequestManager.getRequest(req.params.id, req.userData.userId);
+      res.status(200).json({
+        message: "Request fetched successfully!",
+        request: doc
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async deleteRequest(req, res) {
+    try {
+      const doc = await RequestManager.deleteRequest(req.params.id);
       res.status(200).json({ message: "Request deleted!" });
-    });
-  };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+module.exports = RequestController;
+
 

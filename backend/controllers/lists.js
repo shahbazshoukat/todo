@@ -1,49 +1,47 @@
+const ListManager = require("../managers/lists");
 
-const List = require("../models/list");
-
-
-//*****List API */
-
-exports.createList = (req, res, next) => {
-    const list = new List({
-      title: req.body.title,
-      userId: req.userData.userId
-    });
-    list.save().then(createdList => {
+class ListController {
+  static async createList(req, res) {
+    try {
+      const doc = await ListManager.createList(req.body, req.userData.userId);
       res.status(201).json({
         message: "List Added successfully",
-        listId: createdList._id
+        listId: doc._id
       });
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }
-
-  exports.getLists = (req, res, next) => {
-    List.find({ userId: req.userData.userId }).then(documents => {
+  static async getLists(req, res) {
+    try {
+      const doc = await ListManager.getLists(req.userData.userId);
       res.status(200).json({
         message: "Lists fetched successfully!",
-        lists: documents
+        lists: doc
       });
-    });
-  };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async getList(req, res) {
+    try {
+      const doc = await ListManager.getList(req.params.id, req.userData.userId);
+      res.status(200).json({
+        message: "List fetched successfully!",
+        lists: doc
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async deleteList(req, res) {
+    try {
+      const doc = await ListManager.deleteList(req.params.id, req.userData.userId);
+      res.status(200).json({ message: "List deleted!" });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
 
-  exports.getList =  (req, res, next) => {
-    List.findOne({ _id: req.params.id, userId: req.userData.userId }).then(
-      documents => {
-        res.status(200).json({
-          message: "List fetched successfully!",
-          lists: documents
-        });
-      }
-    );
-  };
-
-  exports.deleteList = (req, res, next) => {
-    List.deleteOne({ _id: req.params.id, userId: req.userData.userId }).then(
-      result => {
-        console.log(result);
-        res.status(200).json({ message: "List deleted!" });
-      }
-    );
-  };
-
-
+module.exports = ListController;

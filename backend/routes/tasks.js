@@ -2,30 +2,30 @@ const express = require("express");
 const Task = require("../models/task");
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
-const tasksController = require("../controllers/tasks");
+const TasksController = require("../controllers/tasks");
 /***Tasks Api */
 
-router.post("/tasks", checkAuth, tasksController.createTask );
+router.post("/tasks", checkAuth, TasksController.createTask );
   
-  router.get("/tasks", checkAuth, tasksController.getTasks);
+  router.get("/tasks", checkAuth, TasksController.getTasks);
   
-  router.get("/tasksbylist:list", checkAuth, tasksController.getTasksByList);
+  router.get("/tasksbylist:list", checkAuth, TasksController.getTasksByList);
   
-  router.get("/taskscountbylist:list", checkAuth, tasksController.getTasksCountByList);
+  router.get("/taskscountbylist:list", checkAuth, TasksController.getTasksCountByList);
   
-  router.get("/taskscountbylabel:label", checkAuth, tasksController.getTasksCountByLabel);
+  router.get("/taskscountbylabel:label", checkAuth, TasksController.getTasksCountByLabel);
   
-  router.get("/tasksbylabel:label", checkAuth, tasksController.getTasksByLabel);
+  router.get("/tasksbylabel:label", checkAuth, TasksController.getTasksByLabel);
   
-  router.get("/tasksbygroup:group", checkAuth, tasksController.getTasksByGroup);
+  router.get("/tasksbygroup:group", checkAuth, TasksController.getTasksByGroup);
   
-  router.get("/tasks:id", checkAuth, tasksController.getTask);
+  router.get("/tasks:id", checkAuth, TasksController.getTask);
   
-  router.put("/tasks/:id", checkAuth, tasksController.updateTask);
+  router.put("/tasks/:id", checkAuth, TasksController.updateTask);
   
-  router.delete("/tasks/:id", checkAuth, tasksController.deleteTask);
+  router.delete("/tasks/:id", checkAuth, TasksController.deleteTask);
   
-  router.delete("/grouptasks/:id", checkAuth, tasksController.deleteGroupTask);
+  router.delete("/grouptasks/:id", checkAuth, TasksController.deleteGroupTask);
   
 
   module.exports = router;

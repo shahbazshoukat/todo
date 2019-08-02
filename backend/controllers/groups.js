@@ -1,78 +1,69 @@
-const Group = require("../models/group");
+const GroupManager = require("../managers/groups");
 
-
-exports.createGroup = (req, res, next) => {
-  const group = new Group({
-    title: req.body.title,
-    userId: req.userData.userId
-  });
-  group.save().then(createdGroup => {
-    res.status(201).json({
-      message: "Group Added successfully",
-      groupId: createdGroup._id
-    });
-  });
-};
-
-exports.getGroups = (req, res, next) => {
-  Group.find({
-    $or: [{ userId: req.userData.userId }, { members: req.userData.userId }]
-  }).then(documents => {
-    res.status(200).json({
-      message: "Groups fetched successfully!",
-      groups: documents
-    });
-  });
-};
-
-exports.getGroup =  (req, res, next) => {
-  Group.findOne({ _id: req.params.id }).then(documents => {
-    res.status(200).json({
-      message: "Group fetched successfully!",
-      groups: documents
-    });
-  });
-};
-
-exports.addGroupMember = (req, res, next) => {
-  Group.updateOne(
-    { _id: req.body.groupId },
-    {
-      $push: {
-        members: req.userData.userId
-      }
+class GroupController {
+  static async createGroup(req, res) {
+    try {
+      const doc = await GroupManager.createGroup(req.body, req.userData.userId);
+      res.status(201).json({
+        message: "Group Added successfully",
+        groupId: doc._id
+      });
+    } catch (err) {
+      console.log(err);
     }
-  ).then(documents => {
-    res.status(200).json({
-      message: "Member Added successfully!",
-      group: documents
-    });
-  });
-};
-
-exports.removeGroupMember =  (req, res, next) => {
-  Group.updateOne(
-    { _id: req.body.groupId },
-    {
-      $pull: {
-        members: req.body.memberId
-      }
+  }
+  static async getGroups(req, res) {
+    try {
+      const doc = await GroupManager.getGroups(req.userData.userId);
+      res.status(200).json({
+        message: "Groups fetched successfully!",
+        groups: doc
+      });
+    } catch (err) {
+      console.log(err);
     }
-  ).then(documents => {
-    res.status(200).json({
-      message: "Member Removed successfully!",
-      group: documents
-    });
-  });
-};
-
-exports.deleteGroup =  (req, res, next) => {
-  Group.deleteOne({ _id: req.params.id, userId: req.userData.userId }).then(
-    result => {
-      console.log(result);
+  }
+  static async getGroup(req, res) {
+    try {
+      const doc = await GroupManager.getGroup(req.params.id);
+      res.status(200).json({
+        message: "Group fetched successfully!",
+        groups: doc
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async deleteGroup(req, res) {
+    try {
+      const doc = await GroupManager.deleteGroup(req.params.id, req.userData.userId);
       res.status(200).json({ message: "Group deleted!" });
+    } catch (err) {
+      console.log(err);
     }
-  );
-};
+  }
+  static async addGroupMember(req, res) {
+    try {
+      const doc = await GroupManager.addGroupMember(req.body.groupId, req.userData.userId);
+      res.status(200).json({
+        message: "Member Added successfully!",
+        group: doc
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async removeGroupMember(req, res) {
+    try {
+      const doc = await GroupManager.removeGroupMember(req.body.groupId, req.body.memberId);
+      res.status(200).json({
+        message: "Member Removed successfully!",
+        group: doc
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
 
-
+module.exports = GroupController;
