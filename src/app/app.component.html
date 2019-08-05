@@ -1,13 +1,36 @@
-<app-header *ngIf="router.url != '/login' && router.url != '/signup' && userIsAuthenticated" >
+<app-header
+  *ngIf="
+    router.url != '/login' &&
+    router.url != '/signup' &&
+    router.url != '/forgotpassword' &&
+    router.url != '/resetpassword/:token' &&
+    userIsAuthenticated
+  "
+>
+</app-header>
+<app-sidebar
+  *ngIf="
+    router.url != '/login' &&
+    router.url != '/signup' &&
+    router.url != '/forgotpassword' &&
+    router.url != '/resetpassword/:token' &&
+    userIsAuthenticated
+  "
+>
+</app-sidebar>
 
-  </app-header>
-  <app-sidebar *ngIf="router.url != '/login' && router.url != '/signup' && userIsAuthenticated">
-
-  </app-sidebar>
-
-
-<button *ngIf="userIsAuthenticated" class="btn btn-warning btn-lg" (click) = "addTaskBtnClick()" style="border-radius: 100px;position: fixed; bottom: 70px; right:80px; width: 50px; height: 50px" id="showLeftPush"><i class="
-  glyphicon glyphicon-plus" style="color: white; font-size: 20px;"></i></button>
-
+<button
+  *ngIf="userIsAuthenticated"
+  class="btn btn-warning btn-lg"
+  (click)="addTaskBtnClick()"
+  style="border-radius: 100px;position: fixed; bottom: 70px; right:80px; width: 50px; height: 50px"
+  id="showLeftPush"
+>
+  <i
+    class="
+  glyphicon glyphicon-plus"
+    style="color: white; font-size: 20px;"
+  ></i>
+</button>
 
 <router-outlet></router-outlet>

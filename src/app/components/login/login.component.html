@@ -42,7 +42,7 @@
               <span class="remenber-me">Remember me </span>
           </div>
           <div class="right-side-forget">
-              <a href="#" class="for">Forgot password?</a>
+              <a [routerLink]="['/forgotpassword']" routerLinkActive="router-link-active"  class="for">Forgot password?</a>
           </div>
       </div>
       <!-- <span style="color:red; font-size: 12px;" *ngIf="!isValid">{{errorMessage}}</span> -->
@@ -52,7 +52,7 @@
       </form>
       <div class="w3layouts_more-buttn" style="margin-top:70px">
         <h3>
-          Already have an account?
+          Don't have an account?
           <a [routerLink]="['/signup']" routerLinkActive="router-link-active" >Sign Up Here </a>
         </h3>
       </div>

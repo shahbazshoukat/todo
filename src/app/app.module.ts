@@ -20,6 +20,8 @@ import { GroupMembersComponent } from "./components/group-members/group-members.
 import { AddMembersComponent } from "./components/add-members/add-members.component";
 import { RequestComponent } from "./components/request/request.component";
 import { NotFoundComponent } from "./components/not-found/not-found.component";
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { NotFoundComponent } from "./components/not-found/not-found.component";
     AddMembersComponent,
     RequestComponent,
     NotFoundComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
    
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],

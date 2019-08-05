@@ -62,22 +62,17 @@ export class AddMembersComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-    console.log(this.users);
-    console.log(form.value.email);
     let receiver = this.users.find(u => u.email == form.value.email);
-    
-    console.log(receiver);
     if (receiver == undefined) {
       this.message = "Not any user with given email!";
     } else {
       let isMember = this.group.members.find(m => m == receiver._id);
-      if(isMember == undefined && this.group.userId != receiver._id){
+      if (isMember == undefined && this.group.userId != receiver._id) {
         this.requestsService.addRequest(receiver._id, this.groupId);
-        this.message = "Request sent Successfully!"; 
-      }else{
+        this.message = "Request sent Successfully!";
+      } else {
         this.message = "User Already a member!";
       }
-      
     }
   }
 }

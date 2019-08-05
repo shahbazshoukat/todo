@@ -3,8 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject, Observable } from "rxjs";
 import { User } from "./user.model";
-import {environment} from "../../environments/environment";
-
+import { environment } from "../../environments/environment";
 
 const BACKEND_URL = environment.apiURL;
 
@@ -17,11 +16,15 @@ export class UsersService {
   private user: User;
   private username: string;
   private users: any[] = [];
+  private emailStatus;
 
   constructor(private http: HttpClient, private router: Router) {}
 
   getToken() {
     return this.token;
+  }
+  getEmailStatus(){
+    return this.emailStatus;
   }
 
   getIsAuth() {
@@ -45,11 +48,9 @@ export class UsersService {
       email: email,
       password: password
     };
-    this.http
-      .post(BACKEND_URL + "signup", authData)
-      .subscribe(response => {
-        console.log(response);
-      });
+    this.http.post(BACKEND_URL + "signup", authData).subscribe(response => {
+      console.log(response);
+    });
   }
 
   loginUser(email: string, password: string) {
@@ -63,7 +64,6 @@ export class UsersService {
         email: string;
       }>(BACKEND_URL + "login", authData)
       .subscribe(response => {
-        
         const token = response.token;
         this.token = token;
         this.user = {
@@ -92,7 +92,43 @@ export class UsersService {
           this.router.navigate(["/tasks"]);
         }
       });
-     
+  }
+
+  forgotPassword(email: string) {
+    const authData = { email: email };
+    this.http
+      .post<{
+        token: string;
+        expiresIn: number;
+        message: string;
+      }>(BACKEND_URL + "forgotpassword", authData)
+      .subscribe(response => {
+        const token = response.token;
+        this.token = token;
+        this.emailStatus = response.message;
+        if (token) {
+          const expiresInDuration = response.expiresIn;
+          this.setAuthTimer(expiresInDuration);
+          const now = new Date();
+          const expirationDate = new Date(
+            now.getTime() + expiresInDuration * 1000
+          );
+          localStorage.setItem("pToken", token);
+        } else {
+          console.log(response);
+        }
+      });
+  }
+
+  resetPassword(password: string) {
+    const token = localStorage.getItem("pToken");
+    const data = { password: password, token: token };
+    this.http
+      .put<{ message: string }>(BACKEND_URL + "resetpassword", data)
+      .subscribe(response => {
+        console.log(response);
+        localStorage.removeItem("pToken");
+      });
   }
 
   autoAuthUser() {
